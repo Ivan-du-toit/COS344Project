@@ -3,6 +3,8 @@
 
 #include "Mesh.h"
 #include "Utils.h"
+#include "vboindexer.h"
+#include "objloader.h"
 
 #include <GL/glew.h>
 #include <GL/freeglut.h>
@@ -22,8 +24,7 @@ public:
 		~LoadedMesh();
 	protected:
 		GLuint createVOA();
-	private:
 		const char* _filename;
-		GLuint BufferIds[4];
+		GLuint BufferIds[4];		
 };
 #endif
