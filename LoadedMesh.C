@@ -6,7 +6,7 @@ LoadedMesh::LoadedMesh(const char* filename, ShaderManager* shader) : Mesh(shade
 }
 
 LoadedMesh::~LoadedMesh() {
-	glDeleteBuffers(2, &BufferIds[0]);
+	glDeleteBuffers(4, &BufferIds[0]);
 	glDeleteVertexArrays(1, &myVOAID);
 	ExitOnGLError("ERROR: Could not destroy the buffer objects");
 }
@@ -61,7 +61,6 @@ GLuint LoadedMesh::createVOA() {
 	}
 
 	glGenVertexArrays(1, &myVOAID);
-	
 	ExitOnGLError("ERROR: Could not generate the VAO");
 	
 	glBindVertexArray(myVOAID);
@@ -74,31 +73,36 @@ GLuint LoadedMesh::createVOA() {
 	//printf("normal: %d\n", normalLoc);
 	glEnableVertexAttribArray(positionLoc);
 	glEnableVertexAttribArray(colourLoc);
-	//glEnableVertexAttribArray(normalLoc);
 	ExitOnGLError("ERROR: Could not enable vertex attributes");
 
 	glGenBuffers(2, &BufferIds[0]);
 	ExitOnGLError("ERROR: Could not generate the buffer objects");
 
 	glBindBuffer(GL_ARRAY_BUFFER, BufferIds[0]);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size()*sizeof(GLfloat), &vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size()*sizeof(vertices), &vertices[0], GL_STATIC_DRAW);
 	ExitOnGLError("ERROR: Could not bind the VBO to the VAO");
 
 	glVertexAttribPointer(positionLoc, 3, GL_FLOAT, GL_FALSE, 3*sizeof(vertices[0]), (GLvoid*)0);
 	glVertexAttribPointer(colourLoc, 3, GL_FLOAT, GL_FALSE, 3*sizeof(vertices[0]), (GLvoid*)0);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, BufferIds[1]);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, vertexIndices.size()*sizeof(GLuint), &vertexIndices, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, vertexIndices.size()*sizeof(vertexIndices[0]), &vertexIndices[0], GL_STATIC_DRAW);
 	ExitOnGLError("ERROR: Could not bind the IBO to the VAO");
-			
-	/*glBindBuffer(GL_ARRAY_BUFFER, BufferIds[2]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(VERTICES), VERTICES, GL_STATIC_DRAW);
-	ExitOnGLError("ERROR: Could not bind the VBO to the VAO");
+	
+	/*glEnableVertexAttribArray(normalLoc);
+	glVertexAttribPointer(normalLoc, 3, GL_FLOAT, GL_FALSE, 3*sizeof(normals[0]), (GLvoid*)0);
+	ExitOnGLError("ERROR: Could not set VAO attributes");
 
-	glVertexAttribPointer(normalLoc, 3, GL_FLOAT, GL_FALSE, 3*sizeof(VERTICES[0]), (GLvoid*)0);
-	ExitOnGLError("ERROR: Could not set VAO attributes");*/
+	glBindBuffer(GL_ARRAY_BUFFER, BufferIds[2]);
+	glBufferData(GL_ARRAY_BUFFER, normals.size()*sizeof(normals[0]), &vertices, GL_STATIC_DRAW);
+	ExitOnGLError("ERROR: Could not bind the VBO to the VAO2");
 
+	
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, BufferIds[3]);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, normalIndices.size()*sizeof(normalIndices[0]), &normalIndices, GL_STATIC_DRAW);
+	ExitOnGLError("ERROR: Could not bind the IBO to the VAO");*/
 
+	printf("test %d, %d", vertices.size(), normals.size());
 	indexCount = vertexIndices.size();
 	return myVOAID;
 };

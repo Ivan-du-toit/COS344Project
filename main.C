@@ -66,7 +66,8 @@ void Initialize(int argc, char* argv[]) {
 	models[2]->translate(glm::vec3(0.0f, 0.85f, 0.0f));
 	
 	//LoadedMesh* test = new LoadedMesh("meshes/cube.obj", phongShader);
-	models[3] = new Sphere(phongShader, new LoadedMesh("meshes/cube.obj", phongShader));
+	models[3] = new PlainModel(phongShader, new LoadedMesh("meshes/cube.obj", phongShader));
+	//models[3] = new Sphere(phongShader, new Cube(phongShader));
 	cam = new Camera(phongShader, CurrentWidth, CurrentHeight);
 }
 

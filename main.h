@@ -21,6 +21,7 @@
 #include "Camera.h"
 #include "Cube.h"
 #include "LoadedMesh.h"
+#include "PlainModel.h"
 
 #define WINDOW_TITLE_PREFIX "Assignment 3"
 
