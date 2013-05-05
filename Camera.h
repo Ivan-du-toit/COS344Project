@@ -35,7 +35,7 @@ class Camera : public Positionable {
 			}
 			glUseProgram(_shader->getShaderID());
 			glm::mat4 ViewMatrix = glm::lookAt(_translation, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-			glUniformMatrix4fv(_shader->getUniformLocation("worldView"), 1, GL_FALSE, glm::value_ptr(ViewMatrix));
+			glUniformMatrix4fv(_shader->getUniformLocation("view"), 1, GL_FALSE, glm::value_ptr(ViewMatrix));
 			ExitOnGLError("ERROR: Could not set Uniform viewMatrix");
 			
 			glUseProgram(0);

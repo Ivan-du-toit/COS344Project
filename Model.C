@@ -28,7 +28,7 @@ void Model::transform() {
 	glUseProgram(getShaderID());
 	ExitOnGLError("ERROR: Could not use the shader program");
 
-	glUniformMatrix4fv(_shader->getUniformLocation("modelWorld"), 1, GL_FALSE, glm::value_ptr(ModelMatrix));
+	glUniformMatrix4fv(_shader->getUniformLocation("world"), 1, GL_FALSE, glm::value_ptr(ModelMatrix));
 	ExitOnGLError("ERROR: Could not set the shader uniforms");
 }
 

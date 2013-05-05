@@ -2,8 +2,8 @@
 
 layout (triangles, equal_spacing) in;
 
-uniform mat4 worldView;
-uniform mat4 modelWorld;
+uniform mat4 view;
+uniform mat4 world;
 uniform mat4 projection;
 
 out vec4 ex_Color;
@@ -17,7 +17,7 @@ void main() {
 	vec3 position = p0 + p1 + p2;
 	position = normalize(position);
 	normal = vec4(position, 0.0);
-	normal = modelWorld*normal;
+	normal = world*normal;
 	ex_Color = vec4(position, 1.0f);
-	gl_Position = (projection * worldView * modelWorld) * vec4(position, 1.0f);
+	gl_Position = (projection * view * world) * vec4(position, 1.0f);
 }

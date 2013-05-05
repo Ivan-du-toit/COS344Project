@@ -34,6 +34,11 @@ void Initialize(int argc, char* argv[]) {
 	
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+	ShaderManager* passShader = new ShaderManager();
+	passShader->addShader("shaders/pass/fragment.glsl", GL_FRAGMENT_SHADER)
+		->addShader("shaders/pass/vertex.glsl", GL_VERTEX_SHADER)
+		->linkShaders();
+
 	phongShader = new ShaderManager();
 	phongShader->addShader("shaders/phong.fragment.glsl", GL_FRAGMENT_SHADER)
 		->addShader("shaders/phong.vertex.glsl", GL_VERTEX_SHADER)
@@ -55,6 +60,16 @@ void Initialize(int argc, char* argv[]) {
 		->addShader("shaders/gauroud.tes.glsl", GL_TESS_EVALUATION_SHADER)
 		->linkShaders();
 
+	/*models = new Model*[NUMBER_OF_MODELS];
+	models[0] = new Sphere(phongShader, new Cube(phongShader));
+	models[0]->translate(glm::vec3(1.0f, -0.85f, 0.0f));
+
+	models[1] = new Sphere(flatShader, new Cube(flatShader));
+	models[1]->translate(glm::vec3(-1.0f, -0.85f, 0.0f));
+
+	models[2] = new Sphere(gauroudShader, new Cube(gauroudShader));
+	models[2]->translate(glm::vec3(0.0f, 0.85f, 0.0f));*/
+	
 	models = new Model*[NUMBER_OF_MODELS];
 	models[0] = new Sphere(flatShader, new Cube(flatShader));
 	models[0]->translate(glm::vec3(1.0f, -0.85f, 0.0f));
@@ -64,7 +79,7 @@ void Initialize(int argc, char* argv[]) {
 
 	models[2] = new Sphere(phongShader, new Cube(phongShader));
 	models[2]->translate(glm::vec3(0.0f, 0.85f, 0.0f));
-	
+
 	//LoadedMesh* test = new LoadedMesh("meshes/cube.obj", phongShader);
 	models[3] = new PlainModel(phongShader, new LoadedMesh("meshes/cube.obj", phongShader));
 	//models[3] = new Sphere(phongShader, new Cube(phongShader));
