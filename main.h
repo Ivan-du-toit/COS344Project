@@ -20,8 +20,6 @@
 #include "Sphere.h"
 #include "Camera.h"
 #include "Cube.h"
-#include "LoadedMesh.h"
-#include "PlainModel.h"
 
 #define WINDOW_TITLE_PREFIX "Assignment 3"
 
@@ -29,13 +27,13 @@ int CurrentWidth = 800,
 	CurrentHeight = 600,
 	WindowHandle = 0;
 
-bool animate = true;
+bool animate = false;
 
 const int ANIMATIONS_PER_SECOND = 60;
 unsigned FrameCount = 0;
 
-const int NUMBER_OF_MODELS = 4;
-Model** models;
+std::vector<Model*> models;
+//Model** models;
 ShaderManager* phongShader;
 ShaderManager* flatShader;
 ShaderManager* gauroudShader;

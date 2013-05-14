@@ -17,7 +17,7 @@ class ShaderManager {
 		virtual GLuint getUniformLocation(const char* name);
 		virtual GLuint getShaderID();
 		virtual bool hasUniform(const char* name);
-		
+		GLuint findAttributeLoc(const char* name);
 	protected:
 		GLuint programID;
 		std::vector<GLuint> shaders;

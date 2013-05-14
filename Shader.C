@@ -65,3 +65,10 @@ GLuint ShaderManager::getShaderID() {
 bool ShaderManager::hasUniform(const char* name) {
 	return (getUniformLocation(name) != -1);
 }
+
+GLuint ShaderManager::findAttributeLoc(const char* name) {
+	GLint location = glGetAttribLocation(programID, name);
+	if (location == -1)
+		printf("[WARNING] Could not find attribute '%s'.", name);
+	return (GLuint)location;
+}
