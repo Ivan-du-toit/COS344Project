@@ -12,6 +12,8 @@ class Quad: public Mesh
 {
    public:
       Quad(ShaderManager* shader);
+	protected:
+		GLuint createVOA(){return myVOAID;};
 };
 
 #endif

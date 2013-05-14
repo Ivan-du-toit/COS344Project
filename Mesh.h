@@ -14,9 +14,10 @@ class Mesh {
 		virtual ~Mesh();
 		GLuint getIndexCount();
 		GLuint getVOAID();
+		GLuint myVOAID;
 	protected:
 		virtual GLuint createVOA()=0;
-		GLuint myVOAID;
+		
 		int indexCount;
 		GLuint getAttributeLocation(const char* name);
 		ShaderManager* _shader;

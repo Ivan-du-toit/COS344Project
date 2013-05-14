@@ -60,6 +60,13 @@ void Initialize(int argc, char* argv[]) {
 		->addShader("shaders/gauroud.tes.glsl", GL_TESS_EVALUATION_SHADER)
 		->linkShaders();
 
+	ShaderManager tShader = gauroudShader = new ShaderManager();
+	gauroudShader->addShader("shaders/geometry/fragment.glsl", GL_FRAGMENT_SHADER)
+		->addShader("shaders/geometry/vertex.glsl", GL_VERTEX_SHADER)
+		->addShader("shaders/geometry/TCS.glsl", GL_TESS_CONTROL_SHADER)
+		->addShader("shaders/geometry/tes.glsl", GL_TESS_EVALUATION_SHADER)
+		->linkShaders();
+
 	/*models = new Model*[NUMBER_OF_MODELS];
 	models[0] = new Sphere(phongShader, new Cube(phongShader));
 	models[0]->translate(glm::vec3(1.0f, -0.85f, 0.0f));
@@ -81,8 +88,11 @@ void Initialize(int argc, char* argv[]) {
 	models.push_back(new Sphere(phongShader, new Cube(phongShader)));
 	models[2]->translate(glm::vec3(0.0f, 0.85f, 0.0f));
 
-	//LoadedMesh* test = new LoadedMesh("meshes/cube.obj", phongShader);
-	//models[3] = new Sphere(phongShader, new Cube(phongShader));
+	models.push_back(new Sphere(phongShader, new Cube(phongShader)));
+	models[2]->translate(glm::vec3(0.0f, 0.85f, 0.0f));
+
+	models.push_back(new VAOModel(phongShader, new Quad(phongShader)));
+
 	cam = new Camera(phongShader, CurrentWidth, CurrentHeight);
 }
 

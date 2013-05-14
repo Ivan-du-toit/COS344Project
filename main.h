@@ -20,6 +20,8 @@
 #include "Sphere.h"
 #include "Camera.h"
 #include "Cube.h"
+#include "Quad.h"
+#include "VAOModel.h"
 
 #define WINDOW_TITLE_PREFIX "Assignment 3"
 
