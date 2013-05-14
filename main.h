@@ -37,8 +37,6 @@ unsigned FrameCount = 0;
 std::vector<Model*> models;
 //Model** models;
 ShaderManager* phongShader;
-ShaderManager* flatShader;
-ShaderManager* gauroudShader;
 Camera* cam;
 
 void Initialize(int, char*[]);

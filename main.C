@@ -39,54 +39,26 @@ void Initialize(int argc, char* argv[]) {
 		->addShader("shaders/pass/vertex.glsl", GL_VERTEX_SHADER)
 		->linkShaders();*/
 
+	/*ShaderManager* tShader = new ShaderManager();
+	gauroudShader->addShader("shaders/geometry/fragment.glsl", GL_FRAGMENT_SHADER)
+		->addShader("shaders/geometry/vertex.glsl", GL_VERTEX_SHADER)
+		->addShader("shaders/geometry/TCS.glsl", GL_TESS_CONTROL_SHADER)
+		->addShader("shaders/geometry/tes.glsl", GL_TESS_EVALUATION_SHADER)
+		->linkShaders();*/
+
 	phongShader = new ShaderManager();
 	phongShader->addShader("shaders/phong.fragment.glsl", GL_FRAGMENT_SHADER)
 		->addShader("shaders/phong.vertex.glsl", GL_VERTEX_SHADER)
 		->addShader("shaders/phong.TCS.glsl", GL_TESS_CONTROL_SHADER)
 		->addShader("shaders/phong.tes.glsl", GL_TESS_EVALUATION_SHADER)
 		->linkShaders();
-	
-	flatShader = new ShaderManager();
-	flatShader->addShader("shaders/flat.fragment.glsl", GL_FRAGMENT_SHADER)
-		->addShader("shaders/flat.vertex.glsl", GL_VERTEX_SHADER)
-		->addShader("shaders/flat.TCS.glsl", GL_TESS_CONTROL_SHADER)
-		->addShader("shaders/flat.tes.glsl", GL_TESS_EVALUATION_SHADER)
-		->linkShaders();
 
-	gauroudShader = new ShaderManager();
-	gauroudShader->addShader("shaders/gauroud.fragment.glsl", GL_FRAGMENT_SHADER)
-		->addShader("shaders/gauroud.vertex.glsl", GL_VERTEX_SHADER)
-		->addShader("shaders/gauroud.TCS.glsl", GL_TESS_CONTROL_SHADER)
-		->addShader("shaders/gauroud.tes.glsl", GL_TESS_EVALUATION_SHADER)
-		->linkShaders();
-
-	ShaderManager tShader = gauroudShader = new ShaderManager();
-	gauroudShader->addShader("shaders/geometry/fragment.glsl", GL_FRAGMENT_SHADER)
-		->addShader("shaders/geometry/vertex.glsl", GL_VERTEX_SHADER)
-		->addShader("shaders/geometry/TCS.glsl", GL_TESS_CONTROL_SHADER)
-		->addShader("shaders/geometry/tes.glsl", GL_TESS_EVALUATION_SHADER)
-		->linkShaders();
-
-	/*models = new Model*[NUMBER_OF_MODELS];
-	models[0] = new Sphere(phongShader, new Cube(phongShader));
-	models[0]->translate(glm::vec3(1.0f, -0.85f, 0.0f));
-
-	models[1] = new Sphere(flatShader, new Cube(flatShader));
-	models[1]->translate(glm::vec3(-1.0f, -0.85f, 0.0f));
-
-	models[2] = new Sphere(gauroudShader, new Cube(gauroudShader));
-	models[2]->translate(glm::vec3(0.0f, 0.85f, 0.0f));*/
-	
-	//models = new Model*[NUMBER_OF_MODELS];
 	models = std::vector<Model*>();
-	models.push_back(new Sphere(flatShader, new Cube(flatShader)));
+	models.push_back(new Sphere(phongShader, new Cube(phongShader)));
 	models[0]->translate(glm::vec3(1.0f, -0.85f, 0.0f));
-
-	models.push_back(new Sphere(gauroudShader, new Cube(gauroudShader)));
-	models[1]->translate(glm::vec3(-1.0f, -0.85f, 0.0f));
 
 	models.push_back(new Sphere(phongShader, new Cube(phongShader)));
-	models[2]->translate(glm::vec3(0.0f, 0.85f, 0.0f));
+	models[1]->translate(glm::vec3(-1.0f, -0.85f, 0.0f));
 
 	models.push_back(new Sphere(phongShader, new Cube(phongShader)));
 	models[2]->translate(glm::vec3(0.0f, 0.85f, 0.0f));
@@ -146,35 +118,13 @@ void cleanup() {
 		delete models[i];
 	//delete models;
 	delete cam;
-	delete flatShader;
 	delete phongShader;
-	delete gauroudShader;
 	printf("bye\n");
 }
 
 void keyboard(unsigned char key, int x, int y) {
 	switch (key) {
 		case 27: glutDestroyWindow (WindowHandle); exit(EXIT_SUCCESS); break;
-		case '1': 
-			models[0]->setShader(flatShader);
-			models[1]->setShader(gauroudShader);
-			models[2]->setShader(phongShader);
-		break;
-		case '2': 
-			models[0]->setShader(flatShader);
-			models[1]->setShader(flatShader);
-			models[2]->setShader(flatShader);
-		break;
-		case '3': 
-			models[0]->setShader(gauroudShader);
-			models[1]->setShader(gauroudShader);
-			models[2]->setShader(gauroudShader);
-		break;
-		case '4': 
-			models[0]->setShader(phongShader);
-			models[1]->setShader(phongShader);
-			models[2]->setShader(phongShader);
-		break;
 		case ' ': animate = !animate; break; 
 		default :printf("%c was pressed\n", key);
 	}
