@@ -45,13 +45,12 @@ class Cube: public Mesh {
 			glBindVertexArray(myVOAID);
 			ExitOnGLError("ERROR: Could not bind the VAO");
 
-			GLuint positionLoc = getAttributeLocation("position");
-			GLuint colourLoc = getAttributeLocation("colour");
-			GLuint normalLoc = getAttributeLocation("normal");
+			GLint positionLoc = getAttributeLocation("position");
+			GLint colourLoc = getAttributeLocation("colour");
+			GLint normalLoc = getAttributeLocation("normal");
 
 			//printf("normal: %d\n", normalLoc);
 			glEnableVertexAttribArray(positionLoc);
-			glEnableVertexAttribArray(colourLoc);
 			//glEnableVertexAttribArray(normalLoc);
 			ExitOnGLError("ERROR: Could not enable vertex attributes");
 
@@ -63,7 +62,10 @@ class Cube: public Mesh {
 			ExitOnGLError("ERROR: Could not bind the VBO to the VAO");
 
 			glVertexAttribPointer(positionLoc, 3, GL_FLOAT, GL_FALSE, 3*sizeof(VERTICES[0]), (GLvoid*)0);
-			glVertexAttribPointer(colourLoc, 3, GL_FLOAT, GL_FALSE, 3*sizeof(VERTICES[0]), (GLvoid*)0);
+			if (colourLoc > -1) {
+				glEnableVertexAttribArray(colourLoc);
+				glVertexAttribPointer(colourLoc, 3, GL_FLOAT, GL_FALSE, 3*sizeof(VERTICES[0]), (GLvoid*)0);
+			}
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, BufferIds[1]);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(INDICES), INDICES, GL_STATIC_DRAW);

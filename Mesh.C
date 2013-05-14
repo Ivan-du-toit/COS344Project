@@ -21,7 +21,7 @@ GLuint Mesh::getVOAID() {
 }
 
 GLuint Mesh::getAttributeLocation(const char* name) {
-	GLint location = glGetAttribLocation((GLuint)_shader->getShaderID(), name);
+	GLint location = _shader->getAtrributeLocation(name);
 
 	if (location == -1)	{
 		fprintf(stderr, "[WARNING] Could not find attribute '%s'.\n", name);

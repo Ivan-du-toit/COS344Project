@@ -42,13 +42,15 @@ class Camera : public Positionable {
 		};
 
 		void updatePerspective(int width, int height) {
+			printf("ShaderID: %d\n", _shader->getShaderID());
 			glUseProgram(_shader->getShaderID());
+			ExitOnGLError("ERROR: Could activate shader Program.");
 			CurrentWidth = width;
 			CurrentHeight = height;
 			glViewport(0, 0, CurrentWidth, CurrentHeight);
 			glm::mat4 ProjectionMatrix = glm::perspective(45.0f, (float)CurrentWidth / (float)CurrentHeight, 0.1f, 100.0f);
 			glUniformMatrix4fv(_shader->getUniformLocation("projection"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
-			ExitOnGLError("ERROR: Could not set Uniform projection");
+			ExitOnGLError("ERROR: Could not set projection matrix");
 			glUseProgram(0);
 		};
 	protected:

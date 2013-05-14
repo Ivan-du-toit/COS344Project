@@ -58,6 +58,10 @@ GLuint ShaderManager::getUniformLocation(const char* name) {
 	return glGetUniformLocation(programID, name);
 }
 
+GLuint ShaderManager::getAtrributeLocation(const char* name) {
+	return glGetAttribLocation(programID, name);
+}
+
 GLuint ShaderManager::getShaderID() {
 	return programID;
 }

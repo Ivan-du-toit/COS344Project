@@ -15,6 +15,7 @@ class ShaderManager {
 		ShaderManager* linkShaders();
 		
 		virtual GLuint getUniformLocation(const char* name);
+		GLuint getAtrributeLocation(const char* name);
 		virtual GLuint getShaderID();
 		virtual bool hasUniform(const char* name);
 		

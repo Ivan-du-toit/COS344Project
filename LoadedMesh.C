@@ -11,6 +11,50 @@ LoadedMesh::~LoadedMesh() {
 	ExitOnGLError("ERROR: Could not destroy the buffer objects");
 }
 
+void LoadedMesh::bind() {
+	printf("posLoc: %d\n" , _shader->getAtrributeLocation("position"));
+	printf("colLoc: %d\n" , _shader->getAtrributeLocation("colour"));
+	// 1rst attribute buffer : vertices
+    glEnableVertexAttribArray( _shader->getAtrributeLocation("position"));
+    glBindBuffer(GL_ARRAY_BUFFER, BufferIds[0]);
+    glVertexAttribPointer(
+             _shader->getAtrributeLocation("position"),                  // attribute
+            3,                  // size
+            GL_FLOAT,           // type
+            GL_FALSE,           // normalized?
+            0,                  // stride
+            (void*)0            // array buffer offset
+    );
+
+    // 2nd attribute buffer : UVs
+    /*glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER, BufferIds[1]);
+    glVertexAttribPointer(
+            1,                                // attribute
+            2,                                // size
+            GL_FLOAT,                         // type
+            GL_FALSE,                         // normalized?
+            0,                                // stride
+            (void*)0                          // array buffer offset
+    );*/
+
+	printf("norLoc: %d\n" , _shader->getAtrributeLocation("normals"));
+    // 3rd attribute buffer : normals
+    glEnableVertexAttribArray(2);
+    glBindBuffer(GL_ARRAY_BUFFER, BufferIds[2]);
+    glVertexAttribPointer(
+            2,                                // attribute
+            2,                                // size
+            GL_FLOAT,                         // type
+            GL_FALSE,                         // normalized?
+            0,                                // stride
+            (void*)0                          // array buffer offset
+    );
+
+    // Index buffer
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, BufferIds[3]);
+}
+
 GLuint LoadedMesh::createVOA() {
 	glGenVertexArrays(1, &myVOAID);
 	ExitOnGLError("ERROR: Could not generate the VAO");
@@ -22,7 +66,7 @@ GLuint LoadedMesh::createVOA() {
     std::vector<glm::vec3> vertices;
     std::vector<glm::vec2> uvs;
     std::vector<glm::vec3> normals;
-    bool res = loadOBJ("suzanne.obj", vertices, uvs, normals);
+    bool res = loadOBJ("meshes/suzanne.obj", vertices, uvs, normals);
 
     std::vector<unsigned short> indices;
     std::vector<glm::vec3> indexed_vertices;
@@ -32,27 +76,28 @@ GLuint LoadedMesh::createVOA() {
 
     // Load it into a VBO
 
-    GLuint vertexbuffer;
-    glGenBuffers(1, &vertexbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
+    
+    glGenBuffers(1, &BufferIds[0]);
+    glBindBuffer(GL_ARRAY_BUFFER, BufferIds[0]);
     glBufferData(GL_ARRAY_BUFFER, indexed_vertices.size() * sizeof(glm::vec3), &indexed_vertices[0], GL_STATIC_DRAW);
 	indexCount = indexed_vertices.size()*3;
-    GLuint uvbuffer;
-    glGenBuffers(1, &uvbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
+    //GLuint uvbuffer;
+    glGenBuffers(1, &BufferIds[1]);
+    glBindBuffer(GL_ARRAY_BUFFER, BufferIds[1]);
     glBufferData(GL_ARRAY_BUFFER, indexed_uvs.size() * sizeof(glm::vec2), &indexed_uvs[0], GL_STATIC_DRAW);
 
-    GLuint normalbuffer;
-    glGenBuffers(1, &normalbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
+    //GLuint normalbuffer;
+    glGenBuffers(1, &BufferIds[2]);
+    glBindBuffer(GL_ARRAY_BUFFER, BufferIds[2]);
     glBufferData(GL_ARRAY_BUFFER, indexed_normals.size() * sizeof(glm::vec3), &indexed_normals[0], GL_STATIC_DRAW);
 
     // Generate a buffer for the indices as well
-    GLuint elementbuffer;
-    glGenBuffers(1, &elementbuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementbuffer);
+    //GLuint elementbuffer;
+    glGenBuffers(1, &BufferIds[3]);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, BufferIds[3]);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned short), &indices[0] , GL_STATIC_DRAW);
 
+	indexCount = indices.size();
 
 	//// Read our .obj file
 	///*std::vector< glm::vec3> vertices;

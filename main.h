@@ -34,7 +34,7 @@ bool animate = true;
 const int ANIMATIONS_PER_SECOND = 60;
 unsigned FrameCount = 0;
 
-const int NUMBER_OF_MODELS = 4;
+const int NUMBER_OF_MODELS = 1;
 Model** models;
 ShaderManager* phongShader;
 ShaderManager* flatShader;

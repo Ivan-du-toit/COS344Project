@@ -22,14 +22,32 @@ class PlainModel : public Model{
   protected: 
     //virtual void createVOA();
 	virtual void drawVOA() {
-		if (_shader->hasUniform("tessLevel")) {
+		/*if (_shader->hasUniform("tessLevel")) {
 			glUniform1f(_shader->getUniformLocation("tessLevel"), 1);
 			ExitOnGLError("ERROR: Could not set the shader uniforms");
 		}
 
 		glPatchParameteri(GL_PATCH_VERTICES, 3);
 		glDrawElements(GL_PATCHES, _mesh->getIndexCount(), GL_UNSIGNED_INT , 0);
+		ExitOnGLError("ERROR: Could not draw the cube");*/
+		((LoadedMesh*)_mesh)->bind();
+		glPatchParameteri(GL_PATCH_VERTICES, 3);
+		glDrawElements(GL_PATCHES, _mesh->getIndexCount(), GL_UNSIGNED_INT , 0);
 		ExitOnGLError("ERROR: Could not draw the cube");
+		
+
+                // Draw the triangles !
+/*                glDrawElements(
+                        GL_TRIANGLES,      // mode
+                        _mesh->getIndexCount(),    // count
+                        GL_UNSIGNED_SHORT,   // type
+                        (void*)0           // element array buffer offset
+                );*/
+
+                /*glDisableVertexAttribArray(0);
+                glDisableVertexAttribArray(1);
+                glDisableVertexAttribArray(2);*/
+
 	};
   private:
 };

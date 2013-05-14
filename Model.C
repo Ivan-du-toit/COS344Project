@@ -37,8 +37,8 @@ void Model::draw() {
 	transform();
 	drawVOA();
 
-	glBindVertexArray(0);
-	glUseProgram(0);
+	//glBindVertexArray(0);
+	//glUseProgram(0);
 }
 
 glm::vec3 Model::getScale() {

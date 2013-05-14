@@ -19,9 +19,10 @@
 #pragma GCC diagnostic pop
 
 class LoadedMesh: public Mesh {
-public:
+	public:
 		LoadedMesh(const char* filename, ShaderManager* shader);
 		~LoadedMesh();
+		void bind();
 	protected:
 		GLuint createVOA();
 		const char* _filename;

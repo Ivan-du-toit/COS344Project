@@ -38,12 +38,30 @@ void Initialize(int argc, char* argv[]) {
 	passShader->addShader("shaders/pass/fragment.glsl", GL_FRAGMENT_SHADER)
 		->addShader("shaders/pass/vertex.glsl", GL_VERTEX_SHADER)
 		->linkShaders();
-
-	phongShader = new ShaderManager();
+	
+	/*ShaderManager* simpleShader = new ShaderManager();
+	passShader->addShader("shaders/vertex.glsl", GL_VERTEX_SHADER)
+		->addShader("shaders/fragment.glsl", GL_FRAGMENT_SHADER)
+		->addShader("shaders/TCS.glsl", GL_TESS_CONTROL_SHADER)
+		->addShader("shaders/tes.glsl", GL_TESS_EVALUATION_SHADER)
+		->linkShaders();*/
+	
+	/*phongShader = new ShaderManager();
 	phongShader->addShader("shaders/phong.fragment.glsl", GL_FRAGMENT_SHADER)
 		->addShader("shaders/phong.vertex.glsl", GL_VERTEX_SHADER)
 		->addShader("shaders/phong.TCS.glsl", GL_TESS_CONTROL_SHADER)
 		->addShader("shaders/phong.tes.glsl", GL_TESS_EVALUATION_SHADER)
+		->linkShaders();*/
+
+	/*phongShader = new ShaderManager();
+	phongShader->addShader("shaders/simple/fragment.glsl", GL_FRAGMENT_SHADER)
+		->addShader("shaders/simple/vertex.glsl", GL_VERTEX_SHADER)
+		->addShader("shaders/simple/TCS.glsl", GL_TESS_CONTROL_SHADER)
+		->addShader("shaders/simple/tes.glsl", GL_TESS_EVALUATION_SHADER)
+		->linkShaders();*/
+	ShaderManager* simpleShader = new ShaderManager();
+	passShader->addShader("shaders/load/vertex.glsl", GL_VERTEX_SHADER)
+		->addShader("shaders/load/fragment.glsl", GL_FRAGMENT_SHADER)
 		->linkShaders();
 	
 	flatShader = new ShaderManager();
@@ -60,30 +78,25 @@ void Initialize(int argc, char* argv[]) {
 		->addShader("shaders/gauroud.tes.glsl", GL_TESS_EVALUATION_SHADER)
 		->linkShaders();
 
-	/*models = new Model*[NUMBER_OF_MODELS];
-	models[0] = new Sphere(phongShader, new Cube(phongShader));
-	models[0]->translate(glm::vec3(1.0f, -0.85f, 0.0f));
-
-	models[1] = new Sphere(flatShader, new Cube(flatShader));
-	models[1]->translate(glm::vec3(-1.0f, -0.85f, 0.0f));
-
-	models[2] = new Sphere(gauroudShader, new Cube(gauroudShader));
-	models[2]->translate(glm::vec3(0.0f, 0.85f, 0.0f));*/
-	
 	models = new Model*[NUMBER_OF_MODELS];
-	models[0] = new Sphere(flatShader, new Cube(flatShader));
+	models[0] = new Sphere(phongShader, new Cube(phongShader));
+	//models[0] = new Sphere(phongShader, new Cube(phongShader));
+
+	/*models[0] = new Sphere(flatShader, new Cube(flatShader));
 	models[0]->translate(glm::vec3(1.0f, -0.85f, 0.0f));
 
 	models[1] = new Sphere(gauroudShader, new Cube(gauroudShader));
 	models[1]->translate(glm::vec3(-1.0f, -0.85f, 0.0f));
 
 	models[2] = new Sphere(phongShader, new Cube(phongShader));
-	models[2]->translate(glm::vec3(0.0f, 0.85f, 0.0f));
+	models[2]->translate(glm::vec3(0.0f, 0.85f, 0.0f));*/
 
-	//LoadedMesh* test = new LoadedMesh("meshes/cube.obj", phongShader);
-	models[3] = new PlainModel(phongShader, new LoadedMesh("meshes/cube.obj", phongShader));
-	//models[3] = new Sphere(phongShader, new Cube(phongShader));
-	cam = new Camera(phongShader, CurrentWidth, CurrentHeight);
+	//models[3] = new PlainModel(phongShader, new LoadedMesh("meshes/cube.obj", phongShader));
+	//models[0] = new PlainModel(simpleShader, new LoadedMesh("meshes/cube.obj", simpleShader));
+	//models[0] = new Quad(passShader);
+	ExitOnGLError("ERROR: After model");
+	cam = new Camera(simpleShader, CurrentWidth, CurrentHeight);
+	ExitOnGLError("ERROR: After camera");
 }
 
 void InitWindow(int argc, char* argv[]) {
