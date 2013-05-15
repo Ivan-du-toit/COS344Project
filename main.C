@@ -45,6 +45,10 @@ void Initialize(int argc, char* argv[]) {
 		->addShader("shaders/geometry/TCS.glsl", GL_TESS_CONTROL_SHADER)
 		->addShader("shaders/geometry/tes.glsl", GL_TESS_EVALUATION_SHADER)
 		->linkShaders();*/
+	ShaderManager* sShader = new ShaderManager();
+	sShader->addShader("shaders/simple/fragment.glsl", GL_FRAGMENT_SHADER)
+		->addShader("shaders/simple/vertex.glsl", GL_VERTEX_SHADER)
+		->linkShaders();
 
 	phongShader = new ShaderManager();
 	phongShader->addShader("shaders/phong.fragment.glsl", GL_FRAGMENT_SHADER)
@@ -63,9 +67,10 @@ void Initialize(int argc, char* argv[]) {
 	models.push_back(new Sphere(phongShader, new Cube(phongShader)));
 	models[2]->translate(glm::vec3(0.0f, 0.85f, 0.0f));
 
-	models.push_back(new VAOModel(phongShader, new Quad(phongShader)));
-
-	cam = new Camera(phongShader, CurrentWidth, CurrentHeight);
+	models.push_back(new VAOModel(sShader, new Quad(sShader)));
+	models[3]->scale(glm::vec3(5, 0, 5));
+	ExitOnGLError("Model messed up");
+	cam = new Camera(sShader, CurrentWidth, CurrentHeight);
 }
 
 void InitWindow(int argc, char* argv[]) {

@@ -6,7 +6,10 @@ VAOModel::~VAOModel() {
 	glDeleteVertexArrays(1, &(_mesh->myVOAID));
 }
 
-void VAOModel::drawVOA() {
+void VAOModel::bind() {
 	glBindVertexArray(_mesh->getVOAID());
-	glDrawArrays(GL_TRIANGLES, 0, 6);
+}
+
+void VAOModel::drawVOA() {
+	glDrawArrays(GL_TRIANGLES, 0, _mesh->getIndexCount());
 }

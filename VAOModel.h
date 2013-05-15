@@ -11,6 +11,7 @@ class VAOModel : public Model {
 	virtual ~VAOModel();
   protected: 
 	virtual void drawVOA();
+	virtual void bind();
   private:
 };
 

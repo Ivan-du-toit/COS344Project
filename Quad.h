@@ -7,6 +7,7 @@
 #include <GL/glew.h>
 
 #include "Mesh.h"
+#include "Utils.h"
 
 class Quad: public Mesh
 {

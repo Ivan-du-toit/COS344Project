@@ -3,6 +3,7 @@
 Model::Model(ShaderManager* shader, Mesh* mesh) {
 	_shader = shader;
 	_mesh = mesh;
+	_scale = glm::vec3(1.0f);
 }
 
 Model::~Model() {
@@ -10,12 +11,13 @@ Model::~Model() {
 }
 
 void Model::bind() {
+	glUseProgram(_shader->getShaderID());
 	glBindVertexArray(_mesh->getVOAID());
 	ExitOnGLError("ERROR: Could not bind the VAO for drawing purposes");
 }
 
 void Model::transform() {
-	glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+	glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), _scale);
 
 	glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), _rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
 	rotationMatrix = glm::rotate(rotationMatrix, _rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));

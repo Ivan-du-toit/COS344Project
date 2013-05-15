@@ -21,7 +21,7 @@ class Camera : public Positionable {
 			_shader = shader;
 			CurrentHeight = height;
 			CurrentWidth = width;
-			_translation = glm::vec3(0,0,5);
+			_translation = glm::vec3(0,3,5);
 		};
 
 		void updateView() {
@@ -43,9 +43,14 @@ class Camera : public Positionable {
 
 		void updatePerspective(int width, int height) {
 			glUseProgram(_shader->getShaderID());
+			if (!_shader->hasUniform("projection")) {
+				printf("[Warning] projection uniform not found.\n");	
+				return;
+			}
 			CurrentWidth = width;
 			CurrentHeight = height;
 			glViewport(0, 0, CurrentWidth, CurrentHeight);
+			//printf("Projection: %d\n", _shader->getUniformLocation("projection"));
 			glm::mat4 ProjectionMatrix = glm::perspective(45.0f, (float)CurrentWidth / (float)CurrentHeight, 0.1f, 100.0f);
 			glUniformMatrix4fv(_shader->getUniformLocation("projection"), 1, GL_FALSE, glm::value_ptr(ProjectionMatrix));
 			ExitOnGLError("ERROR: Could not set Uniform projection");
