@@ -71,6 +71,9 @@ void Initialize(int argc, char* argv[]) {
 	models[3]->scale(glm::vec3(5, 0, 5));
 	ExitOnGLError("Model messed up");
 	cam = new Camera(sShader, CurrentWidth, CurrentHeight);
+
+	//Texture* tex = new Texture("heightmap.png");
+	//printf("TexID: %d\n", tex->getTexID());
 }
 
 void InitWindow(int argc, char* argv[]) {

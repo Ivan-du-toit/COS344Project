@@ -1,27 +1,25 @@
-#include "Utils.h"
+#include "Texture.h"
 
-void ExitOnGLError(const char* error_message) {
-	const GLenum ErrorValue = glGetError();
-
-	if (ErrorValue != GL_NO_ERROR) {
-		const char* APPEND_DETAIL_STRING = ": %s\n";
-		const size_t APPEND_LENGTH = strlen(APPEND_DETAIL_STRING) + 1;
-		const size_t message_length = strlen(error_message);
-		char* display_message = (char*)malloc(message_length + APPEND_LENGTH);
-
-		memcpy(display_message, error_message, message_length);
-		memcpy(&display_message[message_length], APPEND_DETAIL_STRING, APPEND_LENGTH);
-
-		fprintf(stderr, display_message, gluErrorString(ErrorValue));
-
-		free(display_message);
-		exit(EXIT_FAILURE);
-	}
-}
-
-/*
-unsigned char* loadTexturePNG(const char* filename, int& width, int& height) {
+Texture::Texture(const char* filename) {
+	glActiveTexture(GL_TEXTURE0);
+	unsigned texID;
+	glGenTextures(1, &texID);
+	glBindTexture(GL_TEXTURE_2D, texID);
+	
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	
+	int width = 0;
+	int height = 0;
+	
 	FILE* file = fopen(filename, "r");
+	if (file == NULL) {
+		printf("Could not open texture file: %s\n", filename);
+		exit(0);
+	}
 	
 	png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 	if (png_ptr == NULL) {
@@ -35,7 +33,7 @@ unsigned char* loadTexturePNG(const char* filename, int& width, int& height) {
 		exit(-1);
 	}
 	
-	//We jump back here if an error is encountered.
+	/* We jump back here if an error is encountered . */
 	if (setjmp(png_jmpbuf(png_ptr))) {
 		printf("LibPNG encountered and error.\n");
 		
@@ -80,30 +78,20 @@ unsigned char* loadTexturePNG(const char* filename, int& width, int& height) {
 				data[index++] = row_pointers[y][x++];
 		}
 	}
-	
+	fclose (file);
 	width = (int)png_width;
 	height = (int)png_height;
-	
-	return data;
-}*/
-/*
-void loadTexture() {
-	glActiveTexture(GL_TEXTURE0);
-	unsigned textName;
-	glGenTextures(1, &textName);
-	glBindTexture(GL_TEXTURE_2D, textName);
-	
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	
-	int width = 0;
-	int height = 0;
-		
-	unsigned char* data = loadTexturePNG("heightmap.png", width, height);
+
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+
 	delete[] data;
+	glActiveTexture(0);
 }
-*/
+
+void Texture::activate() {
+	glActiveTexture(GL_TEXTURE0);
+}
+
+GLint Texture::getTexID() {
+	return texID;
+}

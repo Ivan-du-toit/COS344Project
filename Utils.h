@@ -10,6 +10,6 @@
 #include <png.h>
 
 void ExitOnGLError(const char* error_message);
-unsigned char* loadTexturePNG(const char* filename, int& width, int& height);
-void loadTexture();
+//unsigned char* loadTexturePNG(const char* filename, int& width, int& height);
+//void loadTexture();
 #endif

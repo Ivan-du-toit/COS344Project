@@ -22,6 +22,7 @@
 #include "Cube.h"
 #include "Quad.h"
 #include "VAOModel.h"
+#include "Texture.h"
 
 #define WINDOW_TITLE_PREFIX "Assignment 3"
 

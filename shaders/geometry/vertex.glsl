@@ -8,9 +8,9 @@ uniform mat4 worldView;
 uniform mat4 projection;
 // */
 // Vertex position.
-layout (location=0) in vec3 position;
+layout (location=1) in vec3 position;
 // Vertex colour.
-layout (location=1) in float colour;
+layout (location=2) in float colour;
 
 // Colour to pass on.
 //out float v_colour;
