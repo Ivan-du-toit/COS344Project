@@ -70,7 +70,7 @@ void Initialize(int argc, char* argv[]) {
 	models.push_back(new VAOModel(sShader, new Quad(sShader)));
 	models[3]->scale(glm::vec3(5, 0, 5));
 	ExitOnGLError("Model messed up");
-	cam = new Camera(sShader, CurrentWidth, CurrentHeight);
+	cam = new Camera(sShader, CurrentWidth, CurrentHeight, camStart, glm::vec3(0.0f));
 
 	//Texture* tex = new Texture("heightmap.png");
 	//printf("TexID: %d\n", tex->getTexID());
@@ -98,9 +98,13 @@ void InitWindow(int argc, char* argv[]) {
 	glutReshapeFunc(ResizeFunction);
 	glutDisplayFunc(RenderFunction);
 	glutIdleFunc(IdleFunction);
-	glutKeyboardFunc(keyboard);
+	//glutKeyboardFunc(keyboard);
 	glutTimerFunc(0, TimerFunction, 0);
 	glutCloseFunc(cleanup);
+
+	glutKeyboardFunc(keyDown);
+	glutKeyboardUpFunc(keyUp);
+	glutPassiveMotionFunc(mouseMove);
 }
 
 void ResizeFunction(int Width, int Height) {
@@ -152,6 +156,51 @@ void mouse(int button, int state, int x, int y) {
 	}
 }
 
+
+void keyUp(unsigned char key, int x, int y) {
+	switch (key) {
+		case 'w': 
+		case 's': cam->setVelocity(cam->getVelocity() * glm::vec3(0, 1, 1)); break;
+		case 'a': 
+		case 'd': cam->setVelocity(cam->getVelocity() * glm::vec3(1, 1, 0)); break;
+	}
+}
+
+void keyDown(unsigned char key, int x, int y) {
+	switch (key) {
+		case 27: exit(EXIT_SUCCESS); break;
+		case 'w': cam->setVelocity(cam->getVelocity()*glm::vec3(0, 1, 1) + glm::vec3(cameraSpeed, 0, 0)); break;
+		case 's': cam->setVelocity(cam->getVelocity()*glm::vec3(0, 1, 1) + glm::vec3(-cameraSpeed, 0, 0));  break;
+		case 'a': cam->setVelocity(cam->getVelocity()*glm::vec3(1, 1, 0) + glm::vec3(0, 0, cameraSpeed));  break;
+		case 'd': cam->setVelocity(cam->getVelocity()*glm::vec3(1, 1, 0) + glm::vec3(0, 0, -cameraSpeed)); break;
+		case 'p': 
+			//printf("Eye: %f, %f, %f\n", eye.x, eye.y, eye.z); 
+			//printf("At: %f, %f, %f\n", at.x, at.y, at.z); 
+			//printf("Direction: %f, %f, %f\n", direction.x, direction.y, direction.z); 
+			//direction = glm::normalize(direction);
+			//printf("Direction: %f, %f, %f\n", direction.x, direction.y, direction.z); 
+		break;
+		case ' ': captureMouse = !captureMouse; break;
+		case 'z': {
+			cam->setAbsolutePosition(camStart);
+			cam->setLookAt(glm::vec3(0.0f));
+		} break;
+		default :printf("%c was pressed\n", key);
+	}
+}
+
+void mouseMove(int x, int y) {
+
+	int centerX = CurrentWidth/2;
+	int centerY = CurrentHeight/2;
+	int deltaX = centerX - x;
+	int deltaY = centerY - y;
+	if (x != centerX || y != centerY) {
+		cam->rotate(deltaX, deltaY);
+		glutWarpPointer(centerX, centerY);
+	}
+}
+
 void IdleFunction(void) {
 	glutPostRedisplay();
 }
@@ -180,6 +229,8 @@ void TimerFunction(int Value) {
 	calcFPS(Value);
 	
 	doAnimation();
+	cam->tick();
 
 	glutTimerFunc(1000/ANIMATIONS_PER_SECOND, TimerFunction, 1);
 }
+

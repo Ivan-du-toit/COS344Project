@@ -31,9 +31,14 @@ int CurrentWidth = 800,
 	WindowHandle = 0;
 
 bool animate = false;
+bool captureMouse = true;
+
+GLfloat cameraSpeed = 1.0f;
 
 const int ANIMATIONS_PER_SECOND = 60;
 unsigned FrameCount = 0;
+
+glm::vec3 camStart = glm::vec3(0,3,5);
 
 std::vector<Model*> models;
 //Model** models;
@@ -49,6 +54,9 @@ void IdleFunction(void);
 void cleanup(void);
 void keyboard(unsigned char key, int x, int y);
 void mouse(int button, int state, int x, int y);
+void keyDown(unsigned char key, int x, int y);
+void keyUp(unsigned char key, int x, int y);
+void mouseMove(int x, int y);
 
 void calcFPS(int Value);
 void doAnimation();

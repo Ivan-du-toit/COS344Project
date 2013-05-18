@@ -15,13 +15,19 @@
 #include "glm/gtc/type_ptr.hpp"
 #pragma GCC diagnostic pop
 
+const float CAM_ROTATE_DAMP = 0.001f;
+const float CAM_MOVE_SPEED = 5.0f/60;
+
 class Camera : public Positionable {
 	public:
-		Camera(ShaderManager* shader, int width, int height) : Positionable() {
+		Camera(ShaderManager* shader, int width, int height, glm::vec3 position, glm::vec3 lookat) : Positionable() {
 			_shader = shader;
 			CurrentHeight = height;
 			CurrentWidth = width;
-			_translation = glm::vec3(0,3,5);
+			_translation = position;
+			velocity = glm::vec3(0.0f);
+			at = lookat;
+			up = glm::vec3(0.0f, 1.0f, 0.0f);
 		};
 
 		void updateView() {
@@ -34,7 +40,7 @@ class Camera : public Positionable {
 				updatePerspective(CurrentWidth, CurrentHeight);
 			}
 			glUseProgram(_shader->getShaderID());
-			glm::mat4 ViewMatrix = glm::lookAt(_translation, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+			glm::mat4 ViewMatrix = glm::lookAt(_translation, at, up);
 			glUniformMatrix4fv(_shader->getUniformLocation("view"), 1, GL_FALSE, glm::value_ptr(ViewMatrix));
 			ExitOnGLError("ERROR: Could not set Uniform viewMatrix");
 			
@@ -56,10 +62,55 @@ class Camera : public Positionable {
 			ExitOnGLError("ERROR: Could not set Uniform projection");
 			glUseProgram(0);
 		};
+
+		void setVelocity(glm::vec3 newVelocity) {
+			velocity = newVelocity;
+		};
+
+		glm::vec3 getVelocity() {
+			return velocity;
+		};
+
+		void rotate(int deltaX, int deltaY) {
+			if (deltaX != 0 || deltaY != 0) {
+				glm::vec3 cameraNormal = at - _translation;
+				glm::vec3 right = glm::normalize(glm::cross(cameraNormal, up));
+
+				glm::vec3 hDirection = cos(-deltaX*CAM_ROTATE_DAMP)*cameraNormal+sin(-deltaX*CAM_ROTATE_DAMP)*right;
+				at = _translation + hDirection;
+
+				cameraNormal = at - _translation;
+				glm::vec3 vDirection = cos(deltaY*CAM_ROTATE_DAMP)*cameraNormal+sin(deltaY*CAM_ROTATE_DAMP)*up;
+				at = _translation + glm::normalize(vDirection);
+			}
+		};
+
+		void setLookAt(glm::vec3 lookAt) {
+			at = lookAt;
+		};
+
+		void tick() {
+			//glm::vec3 direction = glm::normalize(at - _translation);
+			if (velocity.x != 0) {
+				glm::vec3 delta = glm::normalize(at - _translation);
+				_translation = _translation + delta*velocity.x;
+				at = at +  delta*velocity.x;
+			}
+			if (velocity.z != 0) {
+				glm::vec3 delta = glm::normalize(glm::cross(at - _translation, up));
+				_translation = _translation - delta*velocity.z;
+				at = at - delta*velocity.z;
+			}
+
+			//translate(velocity);
+		};
 	protected:
 		ShaderManager* _shader;
 		int CurrentWidth;
 		int CurrentHeight;
+		glm::vec3 velocity;
+		glm::vec3 at;
+		glm::vec3 up;
 };
 
 #endif
