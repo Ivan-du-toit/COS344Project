@@ -1,7 +1,5 @@
 #version 420
 
-//in float v_colour;
-
 in vec3 normal;
 out vec4 colour;
 

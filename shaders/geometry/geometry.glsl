@@ -5,11 +5,8 @@ layout(triangle_strip, max_vertices = 3) out;
 
 out vec3 normal;
 
-// Model-world matrix.
-uniform mat4 modelWorld;
-// World-view matrix.
-uniform mat4 worldView;
-// Projection matrix.
+uniform mat4 world;
+uniform mat4 view;
 uniform mat4 projection;
 
 void main()
@@ -23,16 +20,16 @@ void main()
 	
 	normal = normalize(cross(v0.xyz, v1.xyz));
 	
-	gl_Position = projection * worldView * p0;
+	gl_Position = projection * view * p0;
 	EmitVertex();
 	
-	gl_Position = projection * worldView * p1;
+	gl_Position = projection * view * p1;
 	EmitVertex();
 	
-	gl_Position = projection * worldView * p2;
+	gl_Position = projection * view * p2;
 	EmitVertex();
 	
 	
 	EndPrimitive();
-   //gl_Position = (projection * worldView * modelWorld) * vec4(position, 1.0f);
+   //gl_Position = (projection * view * world) * vec4(position, 1.0f);
 }

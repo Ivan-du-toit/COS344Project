@@ -10,11 +10,10 @@ uniform mat4 projection;
 
 out vec3 Vnormal;
 
-out vec3 fpos;
-
 void main()
 {
-	Vnormal = normal;
+	//Vnormal = normal;
 	gl_Position = projection * view * world * vec4(position, 1.0f);
+	//gl_Position = vec4(position, 1.0f);
 }
 

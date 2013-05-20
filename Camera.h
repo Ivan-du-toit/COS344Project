@@ -48,7 +48,9 @@ class Camera : public Positionable {
 		};
 
 		void updatePerspective(int width, int height) {
+			ExitOnGLError("ERROR: Messedup Before");
 			glUseProgram(_shader->getShaderID());
+			ExitOnGLError("ERROR: Shader is messedup");
 			if (!_shader->hasUniform("projection")) {
 				printf("[Warning] projection uniform not found.\n");	
 				return;

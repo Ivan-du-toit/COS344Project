@@ -30,8 +30,10 @@ int CurrentWidth = 800,
 	CurrentHeight = 600,
 	WindowHandle = 0;
 
+//Weird State globals
 bool animate = false;
 bool captureMouse = true;
+bool wireFrameMode = false;
 
 GLfloat cameraSpeed = 1.0f;
 

@@ -1,7 +1,33 @@
 #include "Texture.h"
 
 Texture::Texture(const char* filename) {
+	CImg<unsigned char> image(filename);
 	glActiveTexture(GL_TEXTURE0);
+	//unsigned texID;
+	glGenTextures(1, &texID);
+	glBindTexture(GL_TEXTURE_2D, texID);
+	
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	
+	int width = image.width();
+	int height = image.height();
+
+	unsigned char* data = new unsigned char[width * height * 3];
+	unsigned index = 0;
+	for (unsigned x = 0; x < height; x++) {
+		for (unsigned y = 0; y < width; y++) {
+					data[index++] = image(x,y,0,0);
+					data[index++] = image(x,y,0,1);
+					data[index++] = image(x,y,0,2);
+			}
+	}
+
+	//CImgDisplay main_disp(image,"Click a point");
+	/*glActiveTexture(GL_TEXTURE0);
 	unsigned texID;
 	glGenTextures(1, &texID);
 	glBindTexture(GL_TEXTURE_2D, texID);
@@ -33,7 +59,7 @@ Texture::Texture(const char* filename) {
 		exit(-1);
 	}
 	
-	/* We jump back here if an error is encountered . */
+	// We jump back here if an error is encountered . 
 	if (setjmp(png_jmpbuf(png_ptr))) {
 		printf("LibPNG encountered and error.\n");
 		
@@ -81,11 +107,10 @@ Texture::Texture(const char* filename) {
 	fclose (file);
 	width = (int)png_width;
 	height = (int)png_height;
-
+	*/
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-
 	delete[] data;
-	glActiveTexture(0);
+	//glActiveTexture(0);
 }
 
 void Texture::activate() {

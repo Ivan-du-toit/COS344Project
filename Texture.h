@@ -1,8 +1,10 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include "Mesh.h"
 #include "Utils.h"
+#include "CImg.h"
+
+using namespace cimg_library; 
 
 class Texture {
 	public:

@@ -11,5 +11,8 @@ void VAOModel::bind() {
 }
 
 void VAOModel::drawVOA() {
+	ExitOnGLError("Before mesh");
+	glPatchParameteri(GL_PATCH_VERTICES, 3);
 	glDrawArrays(GL_TRIANGLES, 0, _mesh->getIndexCount());
+	ExitOnGLError("Could not draw mesh");
 }

@@ -31,8 +31,6 @@ void Initialize(int argc, char* argv[]) {
 
 	glEnable(GL_CULL_FACE);
 	ExitOnGLError("ERROR: Could not set OpenGL culling options");
-	
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	/*ShaderManager* passShader = new ShaderManager();
 	passShader->addShader("shaders/pass/fragment.glsl", GL_FRAGMENT_SHADER)
@@ -46,34 +44,43 @@ void Initialize(int argc, char* argv[]) {
 		->addShader("shaders/geometry/tes.glsl", GL_TESS_EVALUATION_SHADER)
 		->linkShaders();*/
 	ShaderManager* sShader = new ShaderManager();
-	sShader->addShader("shaders/simple/fragment.glsl", GL_FRAGMENT_SHADER)
+		sShader->addShader("shaders/simple/fragment.glsl", GL_FRAGMENT_SHADER)
 		->addShader("shaders/simple/vertex.glsl", GL_VERTEX_SHADER)
 		->linkShaders();
 
+	ShaderManager* geomShader = new ShaderManager();
+		geomShader->addShader("shaders/test/fragment.glsl", GL_FRAGMENT_SHADER)
+		->addShader("shaders/test/vertex.glsl", GL_VERTEX_SHADER)
+		//->addShader("shaders/test/TCS.glsl", GL_TESS_CONTROL_SHADER)
+		//->addShader("shaders/test/tes.glsl", GL_TESS_EVALUATION_SHADER)
+		->addShader("shaders/test/geometry.glsl", GL_GEOMETRY_SHADER)
+		->linkShaders();
+
 	phongShader = new ShaderManager();
-	phongShader->addShader("shaders/phong.fragment.glsl", GL_FRAGMENT_SHADER)
-		->addShader("shaders/phong.vertex.glsl", GL_VERTEX_SHADER)
-		->addShader("shaders/phong.TCS.glsl", GL_TESS_CONTROL_SHADER)
-		->addShader("shaders/phong.tes.glsl", GL_TESS_EVALUATION_SHADER)
+		phongShader->addShader("shaders/phong/fragment.glsl", GL_FRAGMENT_SHADER)
+		->addShader("shaders/phong/vertex.glsl", GL_VERTEX_SHADER)
+		->addShader("shaders/phong/TCS.glsl", GL_TESS_CONTROL_SHADER)
+		->addShader("shaders/phong/tes.glsl", GL_TESS_EVALUATION_SHADER)
 		->linkShaders();
 
 	models = std::vector<Model*>();
 	models.push_back(new Sphere(phongShader, new Cube(phongShader)));
-	models[0]->translate(glm::vec3(1.0f, -0.85f, 0.0f));
+	models[0]->translate(glm::vec3(0.0f, 1.0f, 0.0f));
 
-	models.push_back(new Sphere(phongShader, new Cube(phongShader)));
+	/*models.push_back(new Sphere(phongShader, new Cube(phongShader)));
 	models[1]->translate(glm::vec3(-1.0f, -0.85f, 0.0f));
 
 	models.push_back(new Sphere(phongShader, new Cube(phongShader)));
-	models[2]->translate(glm::vec3(0.0f, 0.85f, 0.0f));
+	models[2]->translate(glm::vec3(0.0f, 0.85f, 0.0f));*/
 
-	models.push_back(new VAOModel(sShader, new Quad(sShader)));
-	models[3]->scale(glm::vec3(5, 0, 5));
+	models.push_back(new VAOModel(geomShader, new Quad(geomShader)));
+	models[models.size()-1]->scale(glm::vec3(500, 0, 500));
 	ExitOnGLError("Model messed up");
-	cam = new Camera(sShader, CurrentWidth, CurrentHeight, camStart, glm::vec3(0.0f));
+	cam = new Camera(phongShader, CurrentWidth, CurrentHeight, camStart, glm::vec3(0.0f));
 
-	//Texture* tex = new Texture("heightmap.png");
-	//printf("TexID: %d\n", tex->getTexID());
+	Texture* tex = new Texture("textures/heightmap.bmp");
+	printf("TexID: %d\n", tex->getTexID());
+	ExitOnGLError("Texture messedup");
 }
 
 void InitWindow(int argc, char* argv[]) {
@@ -119,6 +126,7 @@ void RenderFunction(void) {
 	for (int i=0; i<models.size(); i++) {
 		cam->updateView(models[i]->getShader());
 		models[i]->draw();
+		ExitOnGLError("The Draw messed up");
 	}
 	
 	glutSwapBuffers();
@@ -163,6 +171,7 @@ void keyUp(unsigned char key, int x, int y) {
 		case 's': cam->setVelocity(cam->getVelocity() * glm::vec3(0, 1, 1)); break;
 		case 'a': 
 		case 'd': cam->setVelocity(cam->getVelocity() * glm::vec3(1, 1, 0)); break;
+		case 'W': if (wireFrameMode) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); else glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); wireFrameMode = !wireFrameMode; break;
 	}
 }
 
