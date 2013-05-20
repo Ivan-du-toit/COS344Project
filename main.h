@@ -23,6 +23,7 @@
 #include "Quad.h"
 #include "VAOModel.h"
 #include "Texture.h"
+#include "Skybox.h"
 
 #define WINDOW_TITLE_PREFIX "Assignment 3"
 
@@ -46,6 +47,7 @@ std::vector<Model*> models;
 //Model** models;
 ShaderManager* phongShader;
 Camera* cam;
+Skybox* skybox;
 
 void Initialize(int, char*[]);
 void InitWindow(int, char*[]);

@@ -109,8 +109,23 @@ Texture::Texture(const char* filename) {
 	height = (int)png_height;
 	*/
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-	delete[] data;
 	//glActiveTexture(0);
+}
+
+Texture::~Texture() {
+	delete[] data;
+}
+
+int Texture::getWidth() {
+	return width;
+}
+
+int Texture::getHeight() {
+	return height;
+}
+
+unsigned char* Texture::getColours() {
+	return data;
 }
 
 void Texture::activate() {

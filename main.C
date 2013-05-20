@@ -81,6 +81,8 @@ void Initialize(int argc, char* argv[]) {
 	Texture* tex = new Texture("textures/heightmap.bmp");
 	printf("TexID: %d\n", tex->getTexID());
 	ExitOnGLError("Texture messedup");
+
+	skybox = new Skybox();
 }
 
 void InitWindow(int argc, char* argv[]) {
