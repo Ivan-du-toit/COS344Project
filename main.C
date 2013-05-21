@@ -29,7 +29,7 @@ void Initialize(int argc, char* argv[]) {
 	glEnable(GL_DEPTH_TEST);
 	ExitOnGLError("ERROR: Could not set OpenGL depth testing options");
 
-	//glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 	ExitOnGLError("ERROR: Could not set OpenGL culling options");
 	
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -56,10 +56,10 @@ void Initialize(int argc, char* argv[]) {
 		->linkShaders();
 
 	phongShader = new ShaderManager();
-	phongShader->addShader("shaders/phong.fragment.glsl", GL_FRAGMENT_SHADER)
-		->addShader("shaders/phong.vertex.glsl", GL_VERTEX_SHADER)
-		->addShader("shaders/phong.TCS.glsl", GL_TESS_CONTROL_SHADER)
-		->addShader("shaders/phong.tes.glsl", GL_TESS_EVALUATION_SHADER)
+	phongShader->addShader("shaders/phong/fragment.glsl", GL_FRAGMENT_SHADER)
+		->addShader("shaders/phong/vertex.glsl", GL_VERTEX_SHADER)
+		->addShader("shaders/phong/TCS.glsl", GL_TESS_CONTROL_SHADER)
+		->addShader("shaders/phong/tes.glsl", GL_TESS_EVALUATION_SHADER)
 		->linkShaders();
 
 	models = std::vector<Model*>();
@@ -79,11 +79,6 @@ void Initialize(int argc, char* argv[]) {
 	models.push_back(new VAOModel(sShader, new ObjLoader(sShader)));
 	ExitOnGLError("Model messed up");
 	cam = new Camera(sShader, CurrentWidth, CurrentHeight, camStart, glm::vec3(0.0f));
-
-	//obj = new (new VAOModel(objshader, ObjLoader(objshader));
-
-	//Texture* tex = new Texture("heightmap.png");
-	//printf("TexID: %d\n", tex->getTexID());
 }
 
 void InitWindow(int argc, char* argv[]) {
@@ -130,9 +125,6 @@ void RenderFunction(void) {
 		cam->updateView(models[i]->getShader());
 		models[i]->draw();
 	}
-
-	//cam->updateView(obj->shader);
-	//obj->draw();
 	
 	glutSwapBuffers();
 	glutPostRedisplay();
@@ -141,7 +133,6 @@ void RenderFunction(void) {
 void cleanup() {
 	for (int i=0; i<models.size(); i++)
 		delete models[i];
-	//delete models;
 	delete cam;
 	delete phongShader;
 	printf("bye\n");
