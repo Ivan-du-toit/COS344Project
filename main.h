@@ -24,6 +24,7 @@
 #include "VAOModel.h"
 #include "Texture.h"
 #include "OBjloader.h"
+#include "DepthBuffer.h"
 
 #define WINDOW_TITLE_PREFIX "Assignment 3"
 
@@ -47,7 +48,7 @@ std::vector<Model*> models;
 ShaderManager* phongShader;
 Camera* cam;
 
-ObjLoader* obj;
+DepthBuffer* depthBuffer;
 
 void Initialize(int, char*[]);
 void InitWindow(int, char*[]);

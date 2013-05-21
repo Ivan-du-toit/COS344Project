@@ -75,10 +75,14 @@ void Initialize(int argc, char* argv[]) {
 	models.push_back(new VAOModel(sShader, new Quad(sShader)));
 	models[models.size()-1]->scale(glm::vec3(100, 0, 100));
 	models[models.size()-1]->translate(glm::vec3(0.0f, -2.0f, 0.0f));
-	//Mesh* o = ;
+
 	models.push_back(new VAOModel(sShader, new ObjLoader(sShader)));
 	ExitOnGLError("Model messed up");
+	
 	cam = new Camera(sShader, CurrentWidth, CurrentHeight, camStart, glm::vec3(0.0f));
+	
+	depthBuffer = new DepthBuffer(CurrentWidth, CurrentHeight);
+	depthBuffer->unbind();
 }
 
 void InitWindow(int argc, char* argv[]) {
