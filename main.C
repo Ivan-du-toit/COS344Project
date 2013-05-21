@@ -51,8 +51,8 @@ void Initialize(int argc, char* argv[]) {
 		->linkShaders();
 
 	ShaderManager* objshader = new ShaderManager();
-	objshader->addShader("shaders/obj/TextureFragmentShader.fragmentshader", GL_FRAGMENT_SHADER)
-		->addShader("shaders/obj/TransformVertexShader.vertexshader", GL_VERTEX_SHADER)
+	objshader->addShader("shaders/obj/fragment.glsl", GL_FRAGMENT_SHADER)
+		->addShader("shaders/obj/vertex.glsl", GL_VERTEX_SHADER)
 		->linkShaders();
 
 	phongShader = new ShaderManager();
@@ -76,7 +76,7 @@ void Initialize(int argc, char* argv[]) {
 	models[models.size()-1]->scale(glm::vec3(100, 0, 100));
 	models[models.size()-1]->translate(glm::vec3(0.0f, -2.0f, 0.0f));
 	//Mesh* o = ;
-	models.push_back(new VAOModel(objshader, new ObjLoader(objshader)));
+	models.push_back(new VAOModel(sShader, new ObjLoader(sShader)));
 	ExitOnGLError("Model messed up");
 	cam = new Camera(sShader, CurrentWidth, CurrentHeight, camStart, glm::vec3(0.0f));
 
