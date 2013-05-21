@@ -78,11 +78,11 @@ void Initialize(int argc, char* argv[]) {
 	ExitOnGLError("Model messed up");
 	cam = new Camera(phongShader, CurrentWidth, CurrentHeight, camStart, glm::vec3(0.0f));
 
-	Texture* tex = new Texture("textures/heightmap.bmp");
-	printf("TexID: %d\n", tex->getTexID());
-	ExitOnGLError("Texture messedup");
+	//Texture* tex = new Texture("textures/heightmap.bmp");
+	//printf("TexID: %d\n", tex->getTexID());
+	//ExitOnGLError("Texture messedup");
 
-	skybox = new Skybox();
+	//skybox = new Skybox();
 }
 
 void InitWindow(int argc, char* argv[]) {

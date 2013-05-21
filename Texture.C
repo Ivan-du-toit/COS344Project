@@ -16,7 +16,7 @@ Texture::Texture(const char* filename) {
 	int width = image.width();
 	int height = image.height();
 
-	unsigned char* data = new unsigned char[width * height * 3];
+	data = new unsigned char[width * height * 3];
 	unsigned index = 0;
 	for (unsigned x = 0; x < height; x++) {
 		for (unsigned y = 0; y < width; y++) {
