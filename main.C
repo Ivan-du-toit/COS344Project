@@ -29,7 +29,7 @@ void Initialize(int argc, char* argv[]) {
 	glEnable(GL_DEPTH_TEST);
 	ExitOnGLError("ERROR: Could not set OpenGL depth testing options");
 
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 	ExitOnGLError("ERROR: Could not set OpenGL culling options");
 	
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -50,6 +50,11 @@ void Initialize(int argc, char* argv[]) {
 		->addShader("shaders/simple/vertex.glsl", GL_VERTEX_SHADER)
 		->linkShaders();
 
+	ShaderManager* objshader = new ShaderManager();
+	objshader->addShader("shaders/obj/TextureFragmentShader.fragmentshader", GL_FRAGMENT_SHADER)
+		->addShader("shaders/obj/TransformVertexShader.vertexshader", GL_VERTEX_SHADER)
+		->linkShaders();
+
 	phongShader = new ShaderManager();
 	phongShader->addShader("shaders/phong.fragment.glsl", GL_FRAGMENT_SHADER)
 		->addShader("shaders/phong.vertex.glsl", GL_VERTEX_SHADER)
@@ -59,18 +64,23 @@ void Initialize(int argc, char* argv[]) {
 
 	models = std::vector<Model*>();
 	models.push_back(new Sphere(phongShader, new Cube(phongShader)));
-	models[0]->translate(glm::vec3(1.0f, -0.85f, 0.0f));
+	models[0]->translate(glm::vec3(3.0f, 2.0f, 0.0f));
 
-	models.push_back(new Sphere(phongShader, new Cube(phongShader)));
+	/*models.push_back(new Sphere(phongShader, new Cube(phongShader)));
 	models[1]->translate(glm::vec3(-1.0f, -0.85f, 0.0f));
 
 	models.push_back(new Sphere(phongShader, new Cube(phongShader)));
-	models[2]->translate(glm::vec3(0.0f, 0.85f, 0.0f));
+	models[2]->translate(glm::vec3(0.0f, 0.85f, 0.0f));*/
 
 	models.push_back(new VAOModel(sShader, new Quad(sShader)));
-	models[3]->scale(glm::vec3(5, 0, 5));
+	models[models.size()-1]->scale(glm::vec3(100, 0, 100));
+	models[models.size()-1]->translate(glm::vec3(0.0f, -2.0f, 0.0f));
+	//Mesh* o = ;
+	models.push_back(new VAOModel(objshader, new ObjLoader(objshader)));
 	ExitOnGLError("Model messed up");
 	cam = new Camera(sShader, CurrentWidth, CurrentHeight, camStart, glm::vec3(0.0f));
+
+	//obj = new (new VAOModel(objshader, ObjLoader(objshader));
 
 	//Texture* tex = new Texture("heightmap.png");
 	//printf("TexID: %d\n", tex->getTexID());
@@ -120,6 +130,9 @@ void RenderFunction(void) {
 		cam->updateView(models[i]->getShader());
 		models[i]->draw();
 	}
+
+	//cam->updateView(obj->shader);
+	//obj->draw();
 	
 	glutSwapBuffers();
 	glutPostRedisplay();
@@ -163,6 +176,7 @@ void keyUp(unsigned char key, int x, int y) {
 		case 's': cam->setVelocity(cam->getVelocity() * glm::vec3(0, 1, 1)); break;
 		case 'a': 
 		case 'd': cam->setVelocity(cam->getVelocity() * glm::vec3(1, 1, 0)); break;
+		case 'W': if (wireFrameMode) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); else glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); wireFrameMode = !wireFrameMode; break;
 	}
 }
 

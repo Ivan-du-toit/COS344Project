@@ -23,6 +23,7 @@
 #include "Quad.h"
 #include "VAOModel.h"
 #include "Texture.h"
+#include "OBjloader.h"
 
 #define WINDOW_TITLE_PREFIX "Assignment 3"
 
@@ -32,11 +33,12 @@ int CurrentWidth = 800,
 
 bool animate = false;
 bool captureMouse = true;
-
+bool wireFrameMode = false;
 GLfloat cameraSpeed = 1.0f;
 
 const int ANIMATIONS_PER_SECOND = 60;
 unsigned FrameCount = 0;
+
 
 glm::vec3 camStart = glm::vec3(0,3,5);
 
@@ -44,6 +46,8 @@ std::vector<Model*> models;
 //Model** models;
 ShaderManager* phongShader;
 Camera* cam;
+
+ObjLoader* obj;
 
 void Initialize(int, char*[]);
 void InitWindow(int, char*[]);
