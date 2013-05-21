@@ -9,6 +9,7 @@
 class DepthBuffer : public FrameBuffer {
 	public:
 		DepthBuffer(GLuint width, GLuint height);
+		void write();
 	protected:
 		GLuint _width;
 		GLuint _height;

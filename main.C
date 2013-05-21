@@ -123,15 +123,69 @@ void ResizeFunction(int Width, int Height) {
 void RenderFunction(void) {
 	++FrameCount;
 
+	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+	depthBuffer->bind();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glCullFace(GL_FRONT);
+
+	for (int i=0; i<models.size(); i++) {
+		cam->updateView(models[i]->getShader());
+		models[i]->draw();
+	}
+
+	glFlush();
+
+	glCullFace(GL_BACK);
+	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+	depthBuffer->unbind();
+	if (printScreen) {
+		depthBuffer->write();
+		printScreen = false;
+	}
+	
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	for (int i=0; i<models.size(); i++) {
 		cam->updateView(models[i]->getShader());
 		models[i]->draw();
 	}
+
+	if (printScreen) {
+		screenShot();
+		printScreen = false;
+	}
 	
 	glutSwapBuffers();
 	glutPostRedisplay();
+}
+
+void screenShot() {
+	const GLsizei DATA_SIZE = CurrentWidth * CurrentHeight * (GLsizei)sizeof(GL_UNSIGNED_BYTE) * (GLsizei)3;
+	GLubyte* data = new GLubyte[(unsigned)DATA_SIZE];
+
+	glReadPixels(0, 0, CurrentWidth, CurrentHeight, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+	unsigned char* RGBdata = new unsigned char[(unsigned)800 * 600* sizeof(unsigned char) * 4];
+	GLuint index = 0;
+	GLuint max = CurrentWidth * CurrentHeight * 4;
+	for (GLsizei y = 0; y < CurrentHeight; y++)
+	{
+		for (GLsizei x = 0; x < CurrentWidth; x++)
+		{
+			RGBdata[max - index] = data[index];
+			RGBdata[max - index+1] = data[index+1];
+			RGBdata[max - index+2] = data[index+2];
+			RGBdata[max - index+3] = data[index+3];
+			index += 4;
+		}
+	}
+
+	//Encode the image
+	unsigned error = lodepng_encode32_file("screenShot.png", RGBdata, CurrentWidth, CurrentHeight);
+
+	//if there's an error, display it
+	if(error) printf("error %u: %s\n", error, lodepng_error_text(error));
 }
 
 void cleanup() {
@@ -172,6 +226,7 @@ void keyUp(unsigned char key, int x, int y) {
 		case 'a': 
 		case 'd': cam->setVelocity(cam->getVelocity() * glm::vec3(1, 1, 0)); break;
 		case 'W': if (wireFrameMode) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); else glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); wireFrameMode = !wireFrameMode; break;
+		case ' ': printScreen = true; break;
 	}
 }
 

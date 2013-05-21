@@ -16,7 +16,7 @@
 #pragma GCC diagnostic pop
 
 const float CAM_ROTATE_DAMP = 0.001f;
-const float CAM_MOVE_SPEED = 5.0f/60;
+//const float CAM_MOVE_SPEED = 0.1f/60;
 
 class Camera : public Positionable {
 	public:

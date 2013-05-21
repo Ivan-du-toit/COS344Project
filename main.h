@@ -26,6 +26,9 @@
 #include "OBjloader.h"
 #include "DepthBuffer.h"
 
+
+#include "lodepng.h"
+
 #define WINDOW_TITLE_PREFIX "Assignment 3"
 
 int CurrentWidth = 800,
@@ -35,7 +38,9 @@ int CurrentWidth = 800,
 bool animate = false;
 bool captureMouse = true;
 bool wireFrameMode = false;
-GLfloat cameraSpeed = 1.0f;
+bool printScreen = false;
+
+GLfloat cameraSpeed = 0.5f;
 
 const int ANIMATIONS_PER_SECOND = 60;
 unsigned FrameCount = 0;
@@ -65,5 +70,5 @@ void mouseMove(int x, int y);
 
 void calcFPS(int Value);
 void doAnimation();
-
+void screenShot();
 #endif
