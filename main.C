@@ -80,8 +80,7 @@ void Initialize(int argc, char* argv[]) {
 	ExitOnGLError("Model messed up");
 	
 	cam = new Camera(sShader, CurrentWidth, CurrentHeight, camStart, glm::vec3(0.0f));
-	
-	
+	light = new Light(sShader, CurrentWidth, CurrentHeight, glm::vec3(3.0f), glm::vec3(0.0f));
 }
 
 void InitWindow(int argc, char* argv[]) {
@@ -116,10 +115,13 @@ void InitWindow(int argc, char* argv[]) {
 }
 
 void ResizeFunction(int Width, int Height) {
+	CurrentWidth = Width;
+	CurrentHeight = Height;
+
 	cam->updatePerspective(Width, Height);
 
 	delete depthBuffer;
-	depthBuffer = new DepthBuffer(CurrentWidth, CurrentHeight);
+	depthBuffer = new DepthBuffer(Width, Height);
 	depthBuffer->unbind();
 }
 
@@ -129,7 +131,7 @@ void RenderFunction(void) {
 	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 	depthBuffer->bind();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//glCullFace(GL_FRONT);
+	glCullFace(GL_FRONT);
 
 	for (int i=0; i<models.size(); i++) {
 		cam->updateView(models[i]->getShader());
@@ -138,13 +140,14 @@ void RenderFunction(void) {
 
 	glFlush();
 
-	glCullFace(GL_BACK);
-	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
-	depthBuffer->unbind();
 	if (printScreen) {
 		depthBuffer->write();
 		printScreen = false;
 	}
+	glCullFace(GL_BACK);
+	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+	depthBuffer->unbind();
+	
 	
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

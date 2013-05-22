@@ -53,7 +53,7 @@ DepthBuffer::DepthBuffer(GLuint width, GLuint height) : FrameBuffer(), _height(h
 }
 
 void DepthBuffer::write() {
-
+	bind();
 	const GLsizei DATA_SIZE = _width * _height * (GLsizei)sizeof(GLfloat) * (GLsizei)3;
 	GLfloat* data = new GLfloat[(unsigned)DATA_SIZE];
 

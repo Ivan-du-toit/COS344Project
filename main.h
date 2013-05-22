@@ -25,7 +25,7 @@
 #include "Texture.h"
 #include "OBjloader.h"
 #include "DepthBuffer.h"
-
+#include "Light.h"
 
 #include "lodepng.h"
 
@@ -52,6 +52,7 @@ std::vector<Model*> models;
 //Model** models;
 ShaderManager* phongShader;
 Camera* cam;
+Light* light;
 
 DepthBuffer* depthBuffer;
 
