@@ -81,8 +81,7 @@ void Initialize(int argc, char* argv[]) {
 	
 	cam = new Camera(sShader, CurrentWidth, CurrentHeight, camStart, glm::vec3(0.0f));
 	
-	depthBuffer = new DepthBuffer(CurrentWidth, CurrentHeight);
-	depthBuffer->unbind();
+	
 }
 
 void InitWindow(int argc, char* argv[]) {
@@ -118,6 +117,10 @@ void InitWindow(int argc, char* argv[]) {
 
 void ResizeFunction(int Width, int Height) {
 	cam->updatePerspective(Width, Height);
+
+	delete depthBuffer;
+	depthBuffer = new DepthBuffer(CurrentWidth, CurrentHeight);
+	depthBuffer->unbind();
 }
 
 void RenderFunction(void) {
@@ -168,17 +171,20 @@ void screenShot() {
 
 	unsigned char* RGBdata = new unsigned char[(unsigned)800 * 600* sizeof(unsigned char) * 4];
 	GLuint index = 0;
+	GLuint lineWidth = CurrentWidth*4;
 	GLuint max = CurrentWidth * CurrentHeight * 4;
+	GLuint offset = lineWidth;
 	for (GLsizei y = 0; y < CurrentHeight; y++)
 	{
 		for (GLsizei x = 0; x < CurrentWidth; x++)
 		{
-			RGBdata[max - index] = data[index];
-			RGBdata[max - index+1] = data[index+1];
-			RGBdata[max - index+2] = data[index+2];
-			RGBdata[max - index+3] = data[index+3];
+			RGBdata[max - offset + index] = data[index];
+			RGBdata[max - offset + index+1] = data[index+1];
+			RGBdata[max - offset + index+2] = data[index+2];
+			RGBdata[max - offset + index+3] = data[index+3];
 			index += 4;
 		}
+		offset += lineWidth*2;
 	}
 
 	//Encode the image

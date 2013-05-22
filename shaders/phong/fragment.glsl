@@ -25,5 +25,6 @@ void main(void)
 	
 	float factor = ambient + diffuse * max((dot(lightPosition, n)), 0.0f) + specular * pow(max(dot(reflection, view), 0.0f), shininess);
 
-	out_Color =  factor * ex_Color;
+	out_Color = factor * ex_Color;
+	out_Color.w = 1.0f;
 }

@@ -4,7 +4,7 @@
 
 DepthBuffer::DepthBuffer(GLuint width, GLuint height) : FrameBuffer(), _height(height), _width(width) {
 	glActiveTexture(GL_TEXTURE0);
-
+	
 	GLuint texture;
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
@@ -53,22 +53,7 @@ DepthBuffer::DepthBuffer(GLuint width, GLuint height) : FrameBuffer(), _height(h
 }
 
 void DepthBuffer::write() {
-	/*const GLsizei DATA_SIZE = _width * _height * (GLsizei)sizeof(GLfloat) * (GLsizei)3;
-	GLfloat* data = new GLfloat[(unsigned)DATA_SIZE];
-	
-	glReadPixels(0, 0, _width, _height, GL_DEPTH_COMPONENT, GL_FLOAT, data);
-	unsigned char* RGBdata = new unsigned char[(unsigned)_width * _height * (GLsizei)sizeof(GLfloat) * 3 * 3];
-	GLuint index = 0;
-	for (GLuint i=0; i<DATA_SIZE; i++) {
-		RGBdata[index++] = data[i]* 255;
-		RGBdata[index++] = data[i]* 255;
-		RGBdata[index++] = data[i]* 255;
-	}
-	//Encode the image
-	unsigned error = lodepng_encode32_file("depth.png", RGBdata, _width, _height);
 
-	//if there's an error, display it
-	if(error) printf("error %u: %s\n", error, lodepng_error_text(error));*/
 	const GLsizei DATA_SIZE = _width * _height * (GLsizei)sizeof(GLfloat) * (GLsizei)3;
 	GLfloat* data = new GLfloat[(unsigned)DATA_SIZE];
 
