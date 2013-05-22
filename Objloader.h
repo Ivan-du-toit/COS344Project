@@ -24,7 +24,7 @@ bool loadOBJ(
 
 class ObjLoader: public Mesh {
 	public:
-		ObjLoader(ShaderManager* shader);
+		ObjLoader(ShaderManager* shader, const char* file);
 		//void draw();
 		ShaderManager* _shader;
 	protected:

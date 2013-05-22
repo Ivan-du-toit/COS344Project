@@ -104,6 +104,10 @@ class Camera : public Positionable {
 
 			//translate(velocity);
 		};
+
+		glm::vec3 getAt() {
+			return at;
+		}
 	protected:
 		ShaderManager* _shader;
 		int CurrentWidth;

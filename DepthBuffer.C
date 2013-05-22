@@ -17,7 +17,7 @@ DepthBuffer::DepthBuffer(GLuint width, GLuint height) : FrameBuffer(), _height(h
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 	bind();
-	glDrawBuffer(GL_NONE);
+	//glDrawBuffer(GL_NONE);
 	//glReadBuffer(GL_NONE);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture, 0);
 

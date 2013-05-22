@@ -32,6 +32,7 @@ void Initialize(int argc, char* argv[]) {
 	glEnable(GL_CULL_FACE);
 	ExitOnGLError("ERROR: Could not set OpenGL culling options");
 	
+	//glEnable(GL_TEXTURE_CUBE_MAP);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	/*ShaderManager* passShader = new ShaderManager();
@@ -50,9 +51,9 @@ void Initialize(int argc, char* argv[]) {
 		->addShader("shaders/simple/vertex.glsl", GL_VERTEX_SHADER)
 		->linkShaders();
 
-	ShaderManager* objshader = new ShaderManager();
-	objshader->addShader("shaders/obj/fragment.glsl", GL_FRAGMENT_SHADER)
-		->addShader("shaders/obj/vertex.glsl", GL_VERTEX_SHADER)
+	ShaderManager* skyshader = new ShaderManager();
+	skyshader->addShader("shaders/skybox/fragment.glsl", GL_FRAGMENT_SHADER)
+		->addShader("shaders/skybox/vertex.glsl", GL_VERTEX_SHADER)
 		->linkShaders();
 
 	phongShader = new ShaderManager();
@@ -65,6 +66,7 @@ void Initialize(int argc, char* argv[]) {
 	models = std::vector<Model*>();
 	models.push_back(new Sphere(phongShader, new Cube(phongShader)));
 	models[0]->translate(glm::vec3(3.0f, 2.0f, 0.0f));
+	
 
 	/*models.push_back(new Sphere(phongShader, new Cube(phongShader)));
 	models[1]->translate(glm::vec3(-1.0f, -0.85f, 0.0f));
@@ -75,8 +77,13 @@ void Initialize(int argc, char* argv[]) {
 	models.push_back(new VAOModel(sShader, new Quad(sShader)));
 	models[models.size()-1]->scale(glm::vec3(100, 0, 100));
 	models[models.size()-1]->translate(glm::vec3(0.0f, -2.0f, 0.0f));
-
-	models.push_back(new VAOModel(sShader, new ObjLoader(sShader)));
+	
+	models.push_back(new VAOModel(sShader, new ObjLoader(sShader, "meshes/monkey.obj")));
+	models[models.size()-1]->translate(glm::vec3(0.0f, 2.0f, 0.0f));
+	
+	skybox = new Skybox(skyshader, new ObjLoader(skyshader, "meshes/cube2.obj"));
+	skybox->scale(glm::vec3(50, 50, 50));
+	
 	ExitOnGLError("Model messed up");
 	
 	cam = new Camera(sShader, CurrentWidth, CurrentHeight, camStart, glm::vec3(0.0f));
@@ -128,7 +135,7 @@ void ResizeFunction(int Width, int Height) {
 void RenderFunction(void) {
 	++FrameCount;
 
-	glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+	/*glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
 	depthBuffer->bind();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glCullFace(GL_FRONT);
@@ -147,10 +154,13 @@ void RenderFunction(void) {
 	glCullFace(GL_BACK);
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 	depthBuffer->unbind();
+	*/
 	
-	
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	cam->updateView(skybox->getShader());
+	skybox->setAbsolutePosition(cam->getTranslation());
+	skybox->draw();
 
 	for (int i=0; i<models.size(); i++) {
 		cam->updateView(models[i]->getShader());
@@ -161,7 +171,7 @@ void RenderFunction(void) {
 		screenShot();
 		printScreen = false;
 	}
-	
+
 	glutSwapBuffers();
 	glutPostRedisplay();
 }

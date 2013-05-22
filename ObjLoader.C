@@ -1,15 +1,15 @@
 #include "ObjLoader.h"
 
-ObjLoader::ObjLoader(ShaderManager* shader):Mesh(shader) {
+ObjLoader::ObjLoader(ShaderManager* shader, const char* file):Mesh(shader) {
 	glGenVertexArrays(1, &myVOAID);
 	
 	std::vector<glm::vec3> vertices;
 	std::vector<glm::vec2> uvs;
 	std::vector<glm::vec3> vnormals;
-	bool res = loadOBJ("meshes/monkey.obj", vertices, uvs, vnormals);
+	bool res = loadOBJ(file, vertices, uvs, vnormals);
 
 	const GLsizei VERTEX_ARRAY_SIZE = vertices.size() * 3 * (GLsizei)sizeof(float);
-	indexCount = vertices.size() * 3;
+	indexCount = vertices.size();
 	GLfloat* positions = new float[vertices.size() * 3];
 	GLfloat* normals = new float[vertices.size() * 3];
 	for (int i = 0; i < vertices.size(); i++) {
@@ -47,14 +47,12 @@ ObjLoader::ObjLoader(ShaderManager* shader):Mesh(shader) {
 	} else
 		printf("[Warning] Normal attribute not found.\n");
 	delete[] positions;
+	glBindVertexArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 }
 
-bool loadOBJ(
-	const char * path, 
-	std::vector<glm::vec3> & out_vertices, 
-	std::vector<glm::vec2> & out_uvs,
-	std::vector<glm::vec3> & out_normals
-){
+bool loadOBJ(const char* path, std::vector<glm::vec3> & out_vertices, std::vector<glm::vec2> & out_uvs, std::vector<glm::vec3> & out_normals) {
 	printf("Loading OBJ file %s...\n", path);
 
 	std::vector<unsigned int> vertexIndices, uvIndices, normalIndices;

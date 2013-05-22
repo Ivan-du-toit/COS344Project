@@ -26,6 +26,7 @@
 #include "OBjloader.h"
 #include "DepthBuffer.h"
 #include "Light.h"
+#include "Skybox.h"
 
 #include "lodepng.h"
 
@@ -53,6 +54,7 @@ std::vector<Model*> models;
 ShaderManager* phongShader;
 Camera* cam;
 Light* light;
+Model* skybox;
 
 DepthBuffer* depthBuffer;
 
