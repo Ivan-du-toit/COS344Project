@@ -57,21 +57,17 @@ void DepthBuffer::write() {
 	const GLsizei DATA_SIZE = _width * _height * (GLsizei)sizeof(GLfloat) * (GLsizei)3;
 	GLfloat* data = new GLfloat[(unsigned)DATA_SIZE];
 
-	glReadPixels(0, 0, _width, _height, GL_DEPTH_COMPONENT, GL_FLOAT, &data[0]);
+	glReadPixels(0, 0, _width, _height, GL_DEPTH_COMPONENT, GL_FLOAT, data);
 	printf("What?\n");
 	unsigned char* RGBdata = new unsigned char[(unsigned)_width * _height * sizeof(unsigned char) * 4];
 	GLuint index = 0;
-	for (GLsizei y = 0; y < _height; y++)
-	{
-		for (GLsizei x = 0; x < _width; x++)
-		{
-			//if (data[x+y] != 1.0f)
-				//printf("Num %f\n", data[x+y]);
-			RGBdata[index++] = data[x+y]*255;
-			RGBdata[index++] = data[x+y]*255;
-			RGBdata[index++] = data[x+y]*255;
-			RGBdata[index++] = 255;
-		}
+	GLuint index2 = 0;
+	GLuint pixels = _width * _height * 3;
+	while (index2 < pixels) {
+		RGBdata[index++] = data[index2++]*255;
+		RGBdata[index++] = data[index2++]*255;
+		RGBdata[index++] = data[index2++]*255;
+		RGBdata[index++] = 255;
 	}
 	//Encode the image
 	unsigned error = lodepng_encode32_file("depth.png", RGBdata, _width, _height);
