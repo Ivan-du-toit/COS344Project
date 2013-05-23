@@ -26,28 +26,28 @@ DepthBuffer::DepthBuffer(GLuint width, GLuint height) : FrameBuffer(), _height(h
 	if (status != GL_FRAMEBUFFER_COMPLETE) {
 		switch (status) {
 			case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
-				printf("Error: Incomplete framebuffer attachment.");
+				printf("Error: Incomplete framebuffer attachment.\n");
 			break;
 			case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
-				printf("Error: No color attachment in draw buffer.");
+				printf("Error: No color attachment in draw buffer.\n");
 			break;
 			case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
-	            printf("Error: No color attachment in read buffer.");
+	            printf("Error: No color attachment in read buffer.\n");
 			break;
 		     case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
-			    printf("Error: Framebuffer is missing an attachment.");
+			    printf("Error: Framebuffer is missing an attachment.\n");
 			break;
 			case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:
-				printf("Error: The framebuffer different size multisamples.");
+				printf("Error: The framebuffer different size multisamples.\n");
 			break;
 			case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS:
-				printf("Error: Not all framebuffer attachments are layered.");
+				printf("Error: Not all framebuffer attachments are layered.\n");
 			break;
 			case GL_FRAMEBUFFER_UNSUPPORTED:
-	            printf("The framebuffer configuration is unsupported.");
+	            printf("The framebuffer configuration is unsupported.\n");
 			break;
 		    default:
-				printf("Unknown framebuffer error.");
+				printf("Unknown framebuffer error.\n");
 		}
 	}
 }

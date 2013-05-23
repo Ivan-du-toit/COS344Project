@@ -1,15 +1,15 @@
-#version 420
+#version 430
+layout(location=0) uniform sampler2D heightMap;
 
-//in float v_colour;
+in vec4 Vnormal;
+in vec3 vpos;
 
-in vec3 normal;
 out vec4 colour;
 
 void main()
 {
-	vec3 lightPosition = vec3(3, 3, 0);
-	lightPosition = lightPosition - normal;
-	
-	float intensity = dot(lightPosition, normal);
-	colour = vec4(0.5f, 0.6f, 0.8f, 1.0f) *intensity;
+
+	colour = texture(heightMap, vec2(vpos.x*4.0f, vpos.z*4.0f));
+	//colour = colour + (Vnormal*0.01f);
+	//colour = (Vnormal);
 }

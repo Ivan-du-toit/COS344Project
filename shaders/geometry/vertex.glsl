@@ -1,24 +1,20 @@
 #version 420
-/*
-// Model-world matrix.
-uniform mat4 modelWorld;
-// World-view matrix.
-uniform mat4 worldView;
-// Projection matrix.
-uniform mat4 projection;
-// */
+
 // Vertex position.
 layout (location=1) in vec3 position;
-// Vertex colour.
-layout (location=2) in float colour;
+layout (location=2) in vec3 normal;
 
-// Colour to pass on.
-//out float v_colour;
+uniform mat4 world;
+uniform mat4 view;
+uniform mat4 projection;
+
+out vec4 Vnormal;
+
+out vec3 vpos;
 
 void main()
 {
-   //gl_Position = projection * worldView * modelWorld * vec4(position, 1.0f);
-   gl_Position = vec4(position, 1.0f);
-   //v_colour = colour;
+	Vnormal = vec4(normal, 1.0f);
+	vpos = position + vec3(0.5f);
+	gl_Position = projection * view * world * vec4(position, 1.0f);
 }
-

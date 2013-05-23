@@ -32,7 +32,6 @@ void Initialize(int argc, char* argv[]) {
 	glEnable(GL_CULL_FACE);
 	ExitOnGLError("ERROR: Could not set OpenGL culling options");
 	
-	//glEnable(GL_TEXTURE_CUBE_MAP);
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	/*ShaderManager* passShader = new ShaderManager();
@@ -40,12 +39,14 @@ void Initialize(int argc, char* argv[]) {
 		->addShader("shaders/pass/vertex.glsl", GL_VERTEX_SHADER)
 		->linkShaders();*/
 
-	/*ShaderManager* tShader = new ShaderManager();
-	gauroudShader->addShader("shaders/geometry/fragment.glsl", GL_FRAGMENT_SHADER)
+	ShaderManager* geomShader = new ShaderManager();
+	geomShader->addShader("shaders/geometry/fragment.glsl", GL_FRAGMENT_SHADER)
 		->addShader("shaders/geometry/vertex.glsl", GL_VERTEX_SHADER)
-		->addShader("shaders/geometry/TCS.glsl", GL_TESS_CONTROL_SHADER)
-		->addShader("shaders/geometry/tes.glsl", GL_TESS_EVALUATION_SHADER)
-		->linkShaders();*/
+		//->addShader("shaders/geometry/geometry.glsl", GL_GEOMETRY_SHADER)
+		//->addShader("shaders/geometry/TCS.glsl", GL_TESS_CONTROL_SHADER)
+		//->addShader("shaders/geometry/tes.glsl", GL_TESS_EVALUATION_SHADER)
+		->linkShaders();
+
 	ShaderManager* sShader = new ShaderManager();
 	sShader->addShader("shaders/simple/fragment.glsl", GL_FRAGMENT_SHADER)
 		->addShader("shaders/simple/vertex.glsl", GL_VERTEX_SHADER)
@@ -74,7 +75,7 @@ void Initialize(int argc, char* argv[]) {
 	models.push_back(new Sphere(phongShader, new Cube(phongShader)));
 	models[2]->translate(glm::vec3(0.0f, 0.85f, 0.0f));*/
 
-	models.push_back(new VAOModel(sShader, new Quad(sShader)));
+	models.push_back(new Terrain(geomShader, new Quad(geomShader)));
 	models[models.size()-1]->scale(glm::vec3(100, 0, 100));
 	models[models.size()-1]->translate(glm::vec3(0.0f, -2.0f, 0.0f));
 	
@@ -127,9 +128,9 @@ void ResizeFunction(int Width, int Height) {
 
 	cam->updatePerspective(Width, Height);
 
-	delete depthBuffer;
+	/*delete depthBuffer;
 	depthBuffer = new DepthBuffer(Width, Height);
-	depthBuffer->unbind();
+	depthBuffer->unbind();*/
 }
 
 void RenderFunction(void) {

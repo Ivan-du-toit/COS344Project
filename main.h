@@ -27,6 +27,7 @@
 #include "DepthBuffer.h"
 #include "Light.h"
 #include "Skybox.h"
+#include "Terrain.h"
 
 #include "lodepng.h"
 
