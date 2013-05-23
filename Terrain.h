@@ -10,7 +10,7 @@ class Terrain : public VAOModel {
 	public:
 		Terrain(ShaderManager* shader, Mesh* mesh) : VAOModel(shader, mesh) {
 			glUseProgram(shader->getShaderID());
-			glActiveTexture(GL_TEXTURE1);
+			glActiveTexture(GL_TEXTURE0);
 
 			glGenTextures(1, &textureID);
 			glBindTexture(GL_TEXTURE_2D, textureID);

@@ -29,7 +29,7 @@ void Initialize(int argc, char* argv[]) {
 	glEnable(GL_DEPTH_TEST);
 	ExitOnGLError("ERROR: Could not set OpenGL depth testing options");
 
-	glEnable(GL_CULL_FACE);
+	//glEnable(GL_CULL_FACE);
 	ExitOnGLError("ERROR: Could not set OpenGL culling options");
 	
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -67,17 +67,10 @@ void Initialize(int argc, char* argv[]) {
 	models = std::vector<Model*>();
 	models.push_back(new Sphere(phongShader, new Cube(phongShader)));
 	models[0]->translate(glm::vec3(3.0f, 2.0f, 0.0f));
-	
 
-	/*models.push_back(new Sphere(phongShader, new Cube(phongShader)));
-	models[1]->translate(glm::vec3(-1.0f, -0.85f, 0.0f));
-
-	models.push_back(new Sphere(phongShader, new Cube(phongShader)));
-	models[2]->translate(glm::vec3(0.0f, 0.85f, 0.0f));*/
-
-	models.push_back(new Terrain(geomShader, new Quad(geomShader)));
-	models[models.size()-1]->scale(glm::vec3(100, 0, 100));
-	models[models.size()-1]->translate(glm::vec3(0.0f, -2.0f, 0.0f));
+	models.push_back(new Terrain(geomShader, new MultiQuad(geomShader, 100)));
+	//models[models.size()-1]->scale(glm::vec3(1, 0, 1));
+	models[models.size()-1]->translate(glm::vec3(-50.0f, -2.0f, -50.0f));
 	
 	models.push_back(new VAOModel(sShader, new ObjLoader(sShader, "meshes/monkey.obj")));
 	models[models.size()-1]->translate(glm::vec3(0.0f, 2.0f, 0.0f));

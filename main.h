@@ -28,6 +28,7 @@
 #include "Light.h"
 #include "Skybox.h"
 #include "Terrain.h"
+#include "MultiQuad.h"
 
 #include "lodepng.h"
 
