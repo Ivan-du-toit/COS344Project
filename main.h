@@ -29,6 +29,7 @@
 #include "Skybox.h"
 #include "Terrain.h"
 #include "MultiQuad.h"
+#include "ColourFrameBuffer.h"
 
 #include "lodepng.h"
 
@@ -60,6 +61,7 @@ Light* light;
 Model* skybox;
 
 DepthBuffer* depthBuffer;
+ColourFrameBuffer* colourBuffer;
 
 void Initialize(int, char*[]);
 void InitWindow(int, char*[]);

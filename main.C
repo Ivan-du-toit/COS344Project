@@ -81,7 +81,7 @@ void Initialize(int argc, char* argv[]) {
 	
 	skybox = new Skybox(skyshader, new ObjLoader(skyshader, "meshes/cube2.obj"));
 	skybox->scale(glm::vec3(50, 50, 50));
-	
+
 	ExitOnGLError("Model messed up");
 	
 	cam = new Camera(sShader, CurrentWidth, CurrentHeight, camStart, glm::vec3(0.0f));
@@ -128,6 +128,10 @@ void ResizeFunction(int Width, int Height) {
 	/*delete depthBuffer;
 	depthBuffer = new DepthBuffer(Width, Height);
 	depthBuffer->unbind();*/
+	if (colourBuffer)
+		delete colourBuffer;
+	colourBuffer = new ColourFrameBuffer(Width*2, Height*2);
+	colourBuffer->unbind();
 }
 
 void RenderFunction(void) {
@@ -153,32 +157,40 @@ void RenderFunction(void) {
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 	depthBuffer->unbind();
 	*/
+	//colourBuffer->bind();
+	//cam->updatePerspective(CurrentWidth*2, CurrentHeight*2);
+	//for (int i=0; i<2;i++) {
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
-	cam->updateView(skybox->getShader());
-	glUseProgram(skybox->getShader()->getShaderID());
-	glUniform1i(skybox->getShader()->getUniformLocation("fog"), hasFog);
-	ExitOnGLError("Failed");
-	glUseProgram(0);
-	skybox->setAbsolutePosition(cam->getTranslation());
-	skybox->draw();
+		cam->updateView(skybox->getShader());
+		glUseProgram(skybox->getShader()->getShaderID());
+		glUniform1i(skybox->getShader()->getUniformLocation("fog"), hasFog);
+		ExitOnGLError("Failed");
+		glUseProgram(0);
+		skybox->setAbsolutePosition(cam->getTranslation());
+		skybox->draw();
 
-	for (int i=0; i<models.size(); i++) {
-		ShaderManager* shader = models[i]->getShader();
-		cam->updateView(shader);
-		if (shader->hasUniform("fog")) {
-			glUseProgram(shader->getShaderID());
-			glUniform1i(shader->getUniformLocation("fog"), hasFog);
-			glUseProgram(0);
+		for (int i=0; i<models.size(); i++) {
+			ShaderManager* shader = models[i]->getShader();
+			cam->updateView(shader);
+			if (shader->hasUniform("fog")) {
+				glUseProgram(shader->getShaderID());
+				glUniform1i(shader->getUniformLocation("fog"), hasFog);
+				glUseProgram(0);
+			}
+			models[i]->draw();
 		}
-		models[i]->draw();
-	}
 
-	if (printScreen) {
-		screenShot();
-		printScreen = false;
-	}
+		if (printScreen) {
+			//if (i==0)
+				//colourBuffer->write();
+			//screenShot();
+			printScreen = false;
+		}
+		glFlush();
+		colourBuffer->unbind();
+		cam->updatePerspective(CurrentWidth, CurrentHeight);
+	//}
 
 	glutSwapBuffers();
 	glutPostRedisplay();
@@ -190,7 +202,7 @@ void screenShot() {
 
 	glReadPixels(0, 0, CurrentWidth, CurrentHeight, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
-	unsigned char* RGBdata = new unsigned char[(unsigned)800 * 600* sizeof(unsigned char) * 4];
+	unsigned char* RGBdata = new unsigned char[(unsigned)CurrentWidth * CurrentHeight* sizeof(unsigned char) * 4];
 	GLuint index = 0;
 	GLuint lineWidth = CurrentWidth*4;
 	GLuint max = CurrentWidth * CurrentHeight * 4;

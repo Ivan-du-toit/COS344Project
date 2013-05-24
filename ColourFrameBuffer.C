@@ -42,3 +42,58 @@ ColourFrameBuffer::ColourFrameBuffer(GLuint width, GLuint height): FrameBuffer()
 		}
 	}
 }
+
+
+void ColourFrameBuffer::write() {
+	bind();
+
+	const GLsizei DATA_SIZE = _width * _height * (GLsizei)sizeof(GL_UNSIGNED_BYTE) * (GLsizei)3;
+	GLubyte* data = new GLubyte[(unsigned)DATA_SIZE];
+
+	glReadPixels(0, 0, _width, _height, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+	unsigned char* RGBdata = new unsigned char[(unsigned)_width * _height* sizeof(unsigned char) * 4];
+	GLuint index = 0;
+	GLuint lineWidth = _width*4;
+	GLuint max = _width * _height * 4;
+	GLuint offset = lineWidth;
+	for (GLsizei y = 0; y < _height; y++)
+	{
+		for (GLsizei x = 0; x < _width; x++)
+		{
+			RGBdata[max - offset + index] = data[index];
+			RGBdata[max - offset + index+1] = data[index+1];
+			RGBdata[max - offset + index+2] = data[index+2];
+			RGBdata[max - offset + index+3] = data[index+3];
+			index += 4;
+		}
+		offset += lineWidth*2;
+	}
+
+	//Encode the image
+	unsigned error = lodepng_encode32_file("AA.png", RGBdata, _width, _height);
+
+	//if there's an error, display it
+	if(error) printf("error %u: %s\n", error, lodepng_error_text(error));
+
+	/*const GLsizei DATA_SIZE = _width * _height * (GLsizei)sizeof(GLfloat) * (GLsizei)3;
+	GLfloat* data = new GLfloat[(unsigned)DATA_SIZE];
+
+	glReadPixels(0, 0, _width, _height, GL_DEPTH_COMPONENT, GL_FLOAT, data);
+	printf("What?\n");
+	unsigned char* RGBdata = new unsigned char[(unsigned)_width * _height * sizeof(unsigned char) * 4];
+	GLuint index = 0;
+	GLuint index2 = 0;
+	GLuint pixels = _width * _height * 3;
+	while (index2 < pixels) {
+		RGBdata[index++] = data[index2++]*255;
+		RGBdata[index++] = data[index2++]*255;
+		RGBdata[index++] = data[index2++]*255;
+		RGBdata[index++] = 255;
+	}
+	//Encode the image
+	unsigned error = lodepng_encode32_file("depth.png", RGBdata, _width, _height);
+
+	//if there's an error, display it
+	if(error) printf("error %u: %s\n", error, lodepng_error_text(error));*/
+}
