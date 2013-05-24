@@ -11,4 +11,5 @@ float shininess = 200;
 void main()
 {
 	colour = Vnormal;//vec4(Vnormal, 1.0f);
+	colour *= 0.5f;
 }

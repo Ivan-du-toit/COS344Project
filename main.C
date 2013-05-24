@@ -29,9 +29,13 @@ void Initialize(int argc, char* argv[]) {
 	glEnable(GL_DEPTH_TEST);
 	ExitOnGLError("ERROR: Could not set OpenGL depth testing options");
 
-	//glEnable(GL_CULL_FACE);
+	glEnable(GL_CULL_FACE);
 	ExitOnGLError("ERROR: Could not set OpenGL culling options");
-	
+
+	glEnable(GL_BLEND);
+	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	ExitOnGLError("ERROR: Could not set OpenGL blending options");
+
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	/*ShaderManager* passShader = new ShaderManager();
@@ -68,9 +72,9 @@ void Initialize(int argc, char* argv[]) {
 	models.push_back(new Sphere(phongShader, new Cube(phongShader)));
 	models[0]->translate(glm::vec3(3.0f, 2.0f, 0.0f));
 
-	models.push_back(new Terrain(geomShader, new MultiQuad(geomShader, 100)));
+	models.push_back(new Terrain(geomShader, new MultiQuad(geomShader, 500)));
 	//models[models.size()-1]->scale(glm::vec3(1, 0, 1));
-	models[models.size()-1]->translate(glm::vec3(-50.0f, -2.0f, -50.0f));
+	models[models.size()-1]->translate(glm::vec3(-250.0f, -2.0f, -250.0f));
 	
 	models.push_back(new VAOModel(sShader, new ObjLoader(sShader, "meshes/monkey.obj")));
 	models[models.size()-1]->translate(glm::vec3(0.0f, 2.0f, 0.0f));
@@ -153,11 +157,21 @@ void RenderFunction(void) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
 	cam->updateView(skybox->getShader());
+	glUseProgram(skybox->getShader()->getShaderID());
+	glUniform1i(skybox->getShader()->getUniformLocation("fog"), hasFog);
+	ExitOnGLError("Failed");
+	glUseProgram(0);
 	skybox->setAbsolutePosition(cam->getTranslation());
 	skybox->draw();
 
 	for (int i=0; i<models.size(); i++) {
-		cam->updateView(models[i]->getShader());
+		ShaderManager* shader = models[i]->getShader();
+		cam->updateView(shader);
+		if (shader->hasUniform("fog")) {
+			glUseProgram(shader->getShaderID());
+			glUniform1i(shader->getUniformLocation("fog"), hasFog);
+			glUseProgram(0);
+		}
 		models[i]->draw();
 	}
 
@@ -240,6 +254,8 @@ void keyUp(unsigned char key, int x, int y) {
 		case 'd': cam->setVelocity(cam->getVelocity() * glm::vec3(1, 1, 0)); break;
 		case 'W': if (wireFrameMode) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); else glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); wireFrameMode = !wireFrameMode; break;
 		case ' ': printScreen = true; break;
+		case 'f': hasFog = !hasFog; printf("wtf\n"); break;
+		
 	}
 }
 
@@ -258,6 +274,7 @@ void keyDown(unsigned char key, int x, int y) {
 			//printf("Direction: %f, %f, %f\n", direction.x, direction.y, direction.z); 
 		break;
 		case ' ': captureMouse = !captureMouse; break;
+		//case 'f': hasFog = !hasFog; break;
 		case 'z': {
 			cam->setAbsolutePosition(camStart);
 			cam->setLookAt(glm::vec3(0.0f));

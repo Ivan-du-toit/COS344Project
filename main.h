@@ -42,6 +42,7 @@ bool animate = false;
 bool captureMouse = true;
 bool wireFrameMode = false;
 bool printScreen = false;
+bool hasFog = false;
 
 GLfloat cameraSpeed = 0.5f;
 
