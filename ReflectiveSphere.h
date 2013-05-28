@@ -1,12 +1,12 @@
-#ifndef SKYBOX_H
-#define SKYBOX_H
+#ifndef REFLECTIVE_SPHERE_H
+#define REFLECTIVE_SPHERE_H
 
-#include "VAOModel.h"
+#include "Sphere.h"
 #include "lodepng.h"
 
-class Skybox : public VAOModel {
+class ReflectiveSphere : public Sphere {
 	public:
-		Skybox(ShaderManager* shader, Mesh* mesh) : VAOModel(shader, mesh) {
+		ReflectiveSphere(ShaderManager* shader, Mesh* mesh) : Sphere(shader, mesh) {
 			glActiveTexture(GL_TEXTURE0);
 			glGenTextures(1, &textureID);
 			glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
@@ -44,22 +44,12 @@ class Skybox : public VAOModel {
 			glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &image[0]);
 			image.clear();
 		};
-
-		virtual void drawVOA() {
-			//Disable depth buffering to draw the skybox behind everything.
-			glCullFace(GL_FRONT);
-			glDepthMask(0); 
-			VAOModel::drawVOA();
-			glDepthMask(1); 
-			glCullFace(GL_BACK);
-		};
-
+	protected:
 		virtual void bind() {
-			VAOModel::bind();
+			Sphere::bind();
 			glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
 		};
 
-	protected:
 		GLuint textureID;
 };
 

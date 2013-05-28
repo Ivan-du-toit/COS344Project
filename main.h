@@ -29,6 +29,7 @@
 #include "Skybox.h"
 #include "Terrain.h"
 #include "MultiQuad.h"
+#include "ReflectiveSphere.h"
 #include "ColourFrameBuffer.h"
 
 #include "lodepng.h"

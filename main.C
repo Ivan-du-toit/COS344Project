@@ -36,7 +36,14 @@ void Initialize(int argc, char* argv[]) {
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	ExitOnGLError("ERROR: Could not set OpenGL blending options");
 
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glEnable(GL_MULTISAMPLE);
+	ExitOnGLError("ERROR: Could not set OpenGL MS");
+	GLint  iMultiSample = 0;
+	GLint  iNumSamples = 0;
+	glGetIntegerv(GL_SAMPLE_BUFFERS, &iMultiSample);
+	glGetIntegerv(GL_SAMPLES, &iNumSamples);
+	ExitOnGLError("ERROR: Could not set OpenGL AA");
+	printf("MultiSampling: %d, Number of Samples: %d\n", iMultiSample, iNumSamples);
 
 	/*ShaderManager* passShader = new ShaderManager();
 	passShader->addShader("shaders/pass/fragment.glsl", GL_FRAGMENT_SHADER)
@@ -61,6 +68,13 @@ void Initialize(int argc, char* argv[]) {
 		->addShader("shaders/skybox/vertex.glsl", GL_VERTEX_SHADER)
 		->linkShaders();
 
+	ShaderManager* envShader = new ShaderManager();
+	envShader->addShader("shaders/mapped/fragment.glsl", GL_FRAGMENT_SHADER)
+		->addShader("shaders/mapped/vertex.glsl", GL_VERTEX_SHADER)
+		->addShader("shaders/mapped/TCS.glsl", GL_TESS_CONTROL_SHADER)
+		->addShader("shaders/mapped/tes.glsl", GL_TESS_EVALUATION_SHADER)
+		->linkShaders();
+
 	phongShader = new ShaderManager();
 	phongShader->addShader("shaders/phong/fragment.glsl", GL_FRAGMENT_SHADER)
 		->addShader("shaders/phong/vertex.glsl", GL_VERTEX_SHADER)
@@ -71,13 +85,15 @@ void Initialize(int argc, char* argv[]) {
 	models = std::vector<Model*>();
 	models.push_back(new Sphere(phongShader, new Cube(phongShader)));
 	models[0]->translate(glm::vec3(3.0f, 2.0f, 0.0f));
+	models.push_back(new ReflectiveSphere(envShader, new Cube(envShader)));
+	models[models.size()-1]->translate(glm::vec3(0.0f, 4.0f, 0.0f));
 
 	models.push_back(new Terrain(geomShader, new MultiQuad(geomShader, 500)));
 	//models[models.size()-1]->scale(glm::vec3(1, 0, 1));
 	models[models.size()-1]->translate(glm::vec3(-250.0f, -2.0f, -250.0f));
 	
 	models.push_back(new VAOModel(sShader, new ObjLoader(sShader, "meshes/monkey.obj")));
-	models[models.size()-1]->translate(glm::vec3(0.0f, 2.0f, 0.0f));
+	models[models.size()-1]->translate(glm::vec3(-3.0f, 2.0f, 0.0f));
 	
 	skybox = new Skybox(skyshader, new ObjLoader(skyshader, "meshes/cube2.obj"));
 	skybox->scale(glm::vec3(50, 50, 50));
@@ -99,7 +115,7 @@ void InitWindow(int argc, char* argv[]) {
 	
 	glutInitWindowSize(CurrentWidth, CurrentHeight);
 
-	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA | GLUT_MULTISAMPLE);
 
 	WindowHandle = glutCreateWindow(WINDOW_TITLE_PREFIX);
 
