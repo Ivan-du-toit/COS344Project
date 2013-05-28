@@ -36,6 +36,17 @@ void Initialize(int argc, char* argv[]) {
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	ExitOnGLError("ERROR: Could not set OpenGL blending options");
 
+	glEnable(GL_MULTISAMPLE);
+	ExitOnGLError("ERROR: Could not set OpenGL MS");
+	GLint  iMultiSample = 0;
+	GLint  iNumSamples = 0;
+	glGetIntegerv(GL_SAMPLE_BUFFERS, &iMultiSample);
+	glGetIntegerv(GL_SAMPLES, &iNumSamples);
+	ExitOnGLError("ERROR: Could not set OpenGL AA");
+	printf("MultiSampling: %d, Number of Samples: %d\n", iMultiSample, iNumSamples);
+
+	//glEnable(GLUT_MULTISAMPLE);
+	//ExitOnGLError("ERROR: Could not set OpenGL Multisampling");
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	/*ShaderManager* passShader = new ShaderManager();
@@ -99,7 +110,7 @@ void InitWindow(int argc, char* argv[]) {
 	
 	glutInitWindowSize(CurrentWidth, CurrentHeight);
 
-	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA);
+	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGBA | GLUT_MULTISAMPLE);
 
 	WindowHandle = glutCreateWindow(WINDOW_TITLE_PREFIX);
 
