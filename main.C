@@ -22,7 +22,7 @@ void Initialize(int argc, char* argv[]) {
 	}
 	
 	fprintf(stdout, "INFO: OpenGL Version: %s\n", glGetString(GL_VERSION));
-
+	
 	glGetError();
 	glClearColor(0.5f, 0.5f, 0.5f, 0.0f);
 
@@ -44,6 +44,8 @@ void Initialize(int argc, char* argv[]) {
 	glGetIntegerv(GL_SAMPLES, &iNumSamples);
 	ExitOnGLError("ERROR: Could not set OpenGL AA");
 	printf("MultiSampling: %d, Number of Samples: %d\n", iMultiSample, iNumSamples);
+
+	glutSetCursor(GLUT_CURSOR_NONE);
 
 	/*ShaderManager* passShader = new ShaderManager();
 	passShader->addShader("shaders/pass/fragment.glsl", GL_FRAGMENT_SHADER)
@@ -192,7 +194,6 @@ void RenderFunction(void) {
 			if (shader->hasUniform("fog")) {
 				glUseProgram(shader->getShaderID());
 				glUniform1i(shader->getUniformLocation("fog"), hasFog);
-				glUseProgram(0);
 			}
 			models[i]->draw();
 		}
@@ -200,7 +201,7 @@ void RenderFunction(void) {
 		if (printScreen) {
 			//if (i==0)
 				//colourBuffer->write();
-			//screenShot();
+			screenShot();
 			printScreen = false;
 		}
 		glFlush();
@@ -301,8 +302,7 @@ void keyDown(unsigned char key, int x, int y) {
 			//direction = glm::normalize(direction);
 			//printf("Direction: %f, %f, %f\n", direction.x, direction.y, direction.z); 
 		break;
-		case ' ': captureMouse = !captureMouse; break;
-		//case 'f': hasFog = !hasFog; break;
+		case 'c': captureMouse = !captureMouse; if (captureMouse) glutSetCursor(GLUT_CURSOR_NONE); else glutSetCursor(GLUT_CURSOR_INHERIT); break;
 		case 'z': {
 			cam->setAbsolutePosition(camStart);
 			cam->setLookAt(glm::vec3(0.0f));
@@ -312,14 +312,15 @@ void keyDown(unsigned char key, int x, int y) {
 }
 
 void mouseMove(int x, int y) {
-
-	int centerX = CurrentWidth/2;
-	int centerY = CurrentHeight/2;
-	int deltaX = centerX - x;
-	int deltaY = centerY - y;
-	if (x != centerX || y != centerY) {
-		cam->rotate(deltaX, deltaY);
-		glutWarpPointer(centerX, centerY);
+	if (captureMouse) {
+		int centerX = CurrentWidth/2;
+		int centerY = CurrentHeight/2;
+		int deltaX = centerX - x;
+		int deltaY = centerY - y;
+		if (x != centerX || y != centerY) {
+			cam->rotate(deltaX, deltaY);
+			glutWarpPointer(centerX, centerY);
+		}
 	}
 }
 
@@ -340,11 +341,11 @@ void calcFPS(int Value) {
 }
 
 void doAnimation() {
-	if (animate) {
-		for (int i=0; i<models.size(); i++) {
-			models[i]->rotate(glm::vec3(0.0f, 2.0f, 0));
-		}
-	}
+	//if (animate) {
+		//for (int i=0; i<models.size(); i++) {
+			models[0]->rotate(glm::vec3(0.0f, 2.0f, 0));
+		//}
+	//}
 }
 
 void TimerFunction(int Value) {

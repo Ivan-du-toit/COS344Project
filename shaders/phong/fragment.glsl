@@ -4,9 +4,9 @@ in vec4 normal;
 in vec4 ex_Color;
 out vec4 out_Color;
 
-float ambient = 0.2;
-float diffuse = 0.5;
-float specular = 0.5;
+float ambient = 0.1;
+float diffuse = 0.3;
+float specular = 0.3;
 float shininess = 200;
 
 void main(void)
@@ -15,7 +15,7 @@ void main(void)
 	n.x = normal.x;
 	n.y = normal.y;
 	n.z = normal.z;
-	vec3 lightPosition = vec3(0, 3, 2);
+	vec3 lightPosition = vec3(-3, 1, 0.5);
 	lightPosition = lightPosition - n;
 	
 	vec3 view = vec3(0, 0, 1);
